@@ -17,7 +17,35 @@ type DeckSlide =
       time: string;
     };
 
-export function renderHomePage(_routes: Array<{ path: string; purpose: string }>, slideData: SlideData): string {
+export function renderHomePage(routes: Array<{ path: string; purpose: string }>): string {
+  const visibleRoutes = routes.filter((route) => !route.path.startsWith("/api/") && route.path !== "/slides.js");
+
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Future Frontend 2026 Tools</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body class="index-page">
+    <main class="index-shell" aria-label="Future Frontend 2026 tools">
+      <header class="index-header">
+        <img class="index-logo" src="/assets/ff26-logo.svg" alt="Future Frontend 2026">
+        <div>
+          <p>Organizer tools</p>
+          <h1>Future Frontend 2026</h1>
+        </div>
+      </header>
+      <nav class="index-links" aria-label="Slide sets and print sheets">
+        ${visibleRoutes.map(renderIndexLink).join("")}
+      </nav>
+    </main>
+  </body>
+</html>`;
+}
+
+export function renderSlideDeckPage(slideData: SlideData): string {
   const renderedSlides = buildDeckSlides(slideData.breakSlides)
     .map((slide, index) => renderDeckSlide(slideData.sponsors, slide, index))
     .join("");
@@ -35,6 +63,21 @@ export function renderHomePage(_routes: Array<{ path: string; purpose: string }>
     <script type="module" src="/slides.js"></script>
   </body>
 </html>`;
+}
+
+function renderIndexLink(route: { path: string; purpose: string }): string {
+  const titleByPath = new Map([
+    ["/", "Index"],
+    ["/slides", "Slides"],
+    ["/schedule", "Schedule"],
+    ["/speaker-checkin", "Speaker check-in"],
+  ]);
+  const title = titleByPath.get(route.path) ?? route.path.replace("/", "").replaceAll("-", " ");
+
+  return `<a class="index-link" href="${escapeHtml(route.path)}">
+    <span>${escapeHtml(title)}</span>
+    <p>${escapeHtml(route.purpose)}</p>
+  </a>`;
 }
 
 function buildDeckSlides(breakSlides: BreakSlide[]): DeckSlide[] {

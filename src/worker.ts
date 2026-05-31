@@ -1,7 +1,7 @@
 import { createHealthResponse } from "./api/health";
 import { exampleRoutes } from "./app-routes";
 import { emptySlideData, parseSlideData, type SlideData } from "./slide-data";
-import { renderHomePage } from "./views/home";
+import { renderHomePage, renderSlideDeckPage } from "./views/home";
 import { renderNotFoundPage } from "./views/not-found";
 import { renderSchedulePage } from "./views/schedule";
 import { renderSpeakerCheckInPage } from "./views/speaker-checkin";
@@ -33,7 +33,11 @@ export async function handleRequest(request: Request): Promise<Response> {
   }
 
   if (url.pathname === "/") {
-    return htmlResponse(renderHomePage(exampleRoutes, await loadSlideData()));
+    return htmlResponse(renderHomePage(exampleRoutes));
+  }
+
+  if (url.pathname === "/slides") {
+    return htmlResponse(renderSlideDeckPage(await loadSlideData()));
   }
 
   if (url.pathname === "/schedule") {

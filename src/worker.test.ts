@@ -9,8 +9,23 @@ ensureGeneratedStylesheet();
 ensureGeneratedClientScript();
 
 describe("worker", () => {
-  it("renders the break slide deck", async () => {
+  it("renders the index page", async () => {
     const response = await handleRequest(new Request("http://example.com/"));
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toContain("text/html");
+    expect(response.headers.get("cache-control")).toBe("no-store");
+
+    const body = await response.text();
+    expect(body).toContain("Future Frontend 2026 Tools");
+    expect(body).toContain('href="/slides"');
+    expect(body).toContain('href="/schedule"');
+    expect(body).toContain('href="/speaker-checkin"');
+    expect(body).not.toContain("data-break-slide");
+  });
+
+  it("renders the break slide deck", async () => {
+    const response = await handleRequest(new Request("http://example.com/slides"));
 
     expect(response.status).toBe(200);
     expect(response.headers.get("content-type")).toContain("text/html");
@@ -33,7 +48,7 @@ describe("worker", () => {
     await expect(response.json()).resolves.toEqual({
       ok: true,
       name: "vibe-template-worker",
-      routes: ["/", "/schedule", "/speaker-checkin", "/api/health", "/slides.js"],
+      routes: ["/", "/slides", "/schedule", "/speaker-checkin", "/api/health", "/slides.js"],
     });
   });
 
@@ -105,7 +120,7 @@ describe("worker", () => {
       sponsors: [],
     });
 
-    const response = await handleRequest(new Request("http://example.com/"));
+    const response = await handleRequest(new Request("http://example.com/slides"));
 
     await expect(response.text()).resolves.toContain("Generated session");
     ensureGeneratedBreakSlides();
@@ -113,12 +128,12 @@ describe("worker", () => {
 
   it("falls back to committed break slide data when generated data is missing or invalid", async () => {
     rmSync(join(".generated", "break-slides.json"), { force: true });
-    const missingResponse = await handleRequest(new Request("http://example.com/"));
+    const missingResponse = await handleRequest(new Request("http://example.com/slides"));
 
     await expect(missingResponse.text()).resolves.toContain("Designing futures");
 
     writeGeneratedBreakSlides({ breakSlides: [], sponsors: "not valid" });
-    const invalidResponse = await handleRequest(new Request("http://example.com/"));
+    const invalidResponse = await handleRequest(new Request("http://example.com/slides"));
 
     await expect(invalidResponse.text()).resolves.toContain("Designing futures");
     ensureGeneratedBreakSlides();

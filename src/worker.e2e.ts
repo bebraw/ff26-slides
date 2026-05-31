@@ -1,11 +1,20 @@
 import { expect, test } from "@playwright/test";
 
-test("renders the break slide deck", async ({ page }) => {
+test("renders the index page", async ({ page }) => {
   await page.goto("/", { waitUntil: "domcontentloaded" });
+
+  await expect(page.getByRole("heading", { level: 1, name: "Future Frontend 2026" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Slides Future Frontend 2026 break slide deck/u })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Schedule Printable daily conference schedules/u })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Speaker check-in Printable daily speaker check-in sheets/u })).toBeVisible();
+});
+
+test("renders the break slide deck", async ({ page }) => {
+  await page.goto("/slides", { waitUntil: "domcontentloaded" });
 
   await expect(page.getByRole("heading", { level: 1, name: "Conference registration" })).toBeVisible();
   await expect(page.locator('[data-active-slide="true"]').locator(".next-label")).toHaveCount(0);
-  await page.goto("/?slide=3", { waitUntil: "domcontentloaded" });
+  await page.goto("/slides?slide=3", { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("heading", { level: 1, name: "Designing futures" })).toBeVisible();
   await expect(page.locator('[data-active-slide="true"]').getByText("Pasi Sillanpää")).toBeVisible();
   await page.keyboard.press("ArrowRight");
@@ -15,12 +24,12 @@ test("renders the break slide deck", async ({ page }) => {
 
 test("keeps individual talk slides inside the viewport", async ({ page }) => {
   await page.setViewportSize({ width: 2048, height: 1178 });
-  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.goto("/slides", { waitUntil: "domcontentloaded" });
 
   const slideCount = await page.locator("[data-break-slide]").count();
 
   for (let slideNumber = 1; slideNumber <= slideCount; slideNumber += 1) {
-    await page.goto(`/?slide=${slideNumber}`, { waitUntil: "domcontentloaded" });
+    await page.goto(`/slides?slide=${slideNumber}`, { waitUntil: "domcontentloaded" });
 
     const activeSlide = page.locator('[data-active-slide="true"]');
     const className = await activeSlide.getAttribute("class");
@@ -67,7 +76,7 @@ test("serves the health endpoint", async ({ request }) => {
   await expect(response.json()).resolves.toEqual({
     ok: true,
     name: "vibe-template-worker",
-    routes: ["/", "/schedule", "/speaker-checkin", "/api/health", "/slides.js"],
+    routes: ["/", "/slides", "/schedule", "/speaker-checkin", "/api/health", "/slides.js"],
   });
 });
 

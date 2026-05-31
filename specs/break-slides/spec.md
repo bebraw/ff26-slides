@@ -8,7 +8,8 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 
 ### Architecture
 
-- **Entry point:** `GET /` renders the break slide deck.
+- **Entry point:** `GET /` renders an index linking to the available slide and print tools.
+- **Slide deck view:** `GET /slides` renders the break slide deck.
 - **Schedule view:** `GET /schedule` renders one day schedule sheet at a time on screen and all day sheets for A4 printing.
 - **Speaker check-in view:** `GET /speaker-checkin` renders one talk-day check-in sheet at a time on screen and all talk-day sheets for A4 printing.
 - **Slide source:** `.generated/break-slides.json` contains the generated 2026 conference session data consumed by the Worker when present.
@@ -38,7 +39,8 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 
 ### Definition of Done
 
-- [ ] The root route renders a full-viewport black-and-white slide deck.
+- [ ] The root route renders an index of the slide and print tools.
+- [ ] The slides route renders a full-viewport black-and-white slide deck.
 - [ ] The schedule route renders one daily schedule sheet at a time on screen.
 - [ ] Printing the schedule route produces one A4 portrait sheet per day.
 - [ ] The speaker check-in route renders one talk-day check-in sheet at a time on screen.
@@ -55,8 +57,9 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 
 ### Regression Guardrails
 
-- `GET /` must keep rendering the deck title and conference sessions.
-- `GET /` must keep rendering standalone slides for individual talks from talk-session data.
+- `GET /` must keep linking to `/slides`, `/schedule`, and `/speaker-checkin`.
+- `GET /slides` must keep rendering the deck title and conference sessions.
+- `GET /slides` must keep rendering standalone slides for individual talks from talk-session data.
 - `GET /schedule` must keep rendering daily schedule sheets from the same slide data.
 - `GET /speaker-checkin` must keep rendering speaker check-in sheets from the same slide data.
 - `GET /slides.js` must return the built typed navigation module.
@@ -79,9 +82,15 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 
 **Scenario: Attendee sees the next session**
 
-- Given: the deck is open on the beamer
+- Given: the `/slides` deck is open on the beamer
 - When: a break slide is active
 - Then: attendees can see the next session name, talk titles, speaker names, and speaker images
+
+**Scenario: Organizer finds slide tools**
+
+- Given: the root route is open
+- When: the organizer reviews the index
+- Then: they can open the slide deck, daily schedule, or speaker check-in sheets
 
 **Scenario: Organizer refreshes the schedule**
 
@@ -91,13 +100,13 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 
 **Scenario: Attendee sees a schedule-only interval**
 
-- Given: the deck is open on the beamer
+- Given: the `/slides` deck is open on the beamer
 - When: a registration, welcome, break, lunch, or ending slide is active
 - Then: attendees can see the schedule item without empty talk or speaker placeholders
 
 **Scenario: Organizer advances slides**
 
-- Given: the deck is open in a browser
+- Given: the `/slides` deck is open in a browser
 - When: the organizer presses the right arrow key
 - Then: the next session, talk, or schedule slide becomes visible and the URL updates to `?slide=<number>`
 
@@ -121,7 +130,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 
 **Scenario: Organizer shows an individual talk title**
 
-- Given: the deck is open on a talk-session overview
+- Given: the `/slides` deck is open on a talk-session overview
 - When: the organizer advances to the next slide
 - Then: the individual talk slide shows the talk title, session name, speaker names, and speaker images
 
