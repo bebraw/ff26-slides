@@ -3,9 +3,6 @@
   "name": "ff26-slides",
   "main": "src/worker.ts",
   "compatibility_date": "2026-03-28",
-  "secrets": {
-    "required": ["FF26_GRAPHQL_URL", "FF26_GRAPHQL_TOKEN", "FF26_CONFERENCE_ID"],
-  },
   "build": {
     "command": "npm run build",
     "watch_dir": "src",
