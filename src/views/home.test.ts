@@ -15,6 +15,7 @@ describe("renderHomePage", () => {
     expect(html).toContain("Agentic use cases");
     expect(html).toContain("We Don&#39;t Have an Idea Problem. We Have a Permission Problem.");
     expect(html).toContain("talk-slide-speaker");
+    expect(html).toContain("talk-title-dense");
     expect(html).toContain("talk-grid-3");
     expect(html).toContain("Ohjelmistofriikit");
     expect(html).toContain("/assets/ff26-logo.svg");

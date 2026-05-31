@@ -79,6 +79,7 @@ function renderBreakSlide(slide: BreakSlide, index: number): string {
 
 function renderTalkSlide(slide: Extract<DeckSlide, { kind: "talk" }>, index: number): string {
   const activeAttribute = index === 0 ? ' data-active-slide="true"' : ' aria-hidden="true"';
+  const titleClass = getTalkTitleClass(slide.talk.title);
 
   return `<section class="break-slide talk-slide"${activeAttribute} data-break-slide data-slide-number="${index + 1}">
     <header class="slide-header">
@@ -90,7 +91,7 @@ function renderTalkSlide(slide: Extract<DeckSlide, { kind: "talk" }>, index: num
     </header>
     <div class="talk-slide-content">
       <p class="next-label">${escapeHtml(slide.session)}</p>
-      <h1>${escapeHtml(slide.talk.title)}</h1>
+      <h1 class="talk-title ${titleClass}">${escapeHtml(slide.talk.title)}</h1>
       <div class="talk-slide-speakers">${slide.talk.speakers.map(renderTalkSlideSpeaker).join("")}</div>
     </div>
     <footer class="sponsor-strip" aria-label="Sponsors">
@@ -98,6 +99,24 @@ function renderTalkSlide(slide: Extract<DeckSlide, { kind: "talk" }>, index: num
     </footer>
   </section>`;
 }
+
+// Stryker disable all: Title-size tiers are visual heuristics covered by the browser layout regression test.
+function getTalkTitleClass(title: string): string {
+  if (title.length > 120) {
+    return "talk-title-dense";
+  }
+
+  if (title.length > 76) {
+    return "talk-title-long";
+  }
+
+  if (title.length > 34) {
+    return "talk-title-medium";
+  }
+
+  return "talk-title-short";
+}
+// Stryker restore all
 
 function renderTalk(talkItem: Talk): string {
   return `<article class="talk-card">
