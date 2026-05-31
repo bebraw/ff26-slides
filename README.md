@@ -2,7 +2,7 @@
 
 This repo serves a local Cloudflare Worker slide deck for the Future Frontend 2026 beamer between sessions. The deck is server-rendered HTML with generated Tailwind CSS and a small typed browser module for keyboard navigation.
 
-The root route shows the break slides. Each slide presents the upcoming session, related talks, speaker names and pictures, the Future Frontend logo, and a single sponsor strip with larger tech sponsor slots and smaller brand sponsor slots.
+The root route shows the break slides. Session overview slides present the upcoming session, related talks, speaker names and pictures, the Future Frontend logo, and a single sponsor strip with larger tech sponsor slots and smaller brand sponsor slots. Each talk also gets a standalone title slide for use before the presentation or in post-production.
 
 ## Running
 
@@ -10,7 +10,7 @@ The root route shows the break slides. Each slide presents the upcoming session,
 - Install dependencies with `npm install`.
 - Build generated assets with `npm run build`.
 - Start the Worker with `npm run dev`, then open `http://127.0.0.1:8787`.
-- Use the left and right arrow keys to move between slides.
+- Use the left and right arrow keys to move between session, talk, and schedule slides.
 - The current slide is persisted in the URL as `?slide=<number>`, using one-based slide numbers.
 
 ## Slide Content

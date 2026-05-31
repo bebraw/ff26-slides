@@ -180,6 +180,54 @@
     line-height: 0.98;
   }
 
+  .talk-slide-content {
+    align-self: center;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 34vw);
+    gap: clamp(1.5rem, 4vw, 5rem);
+    align-items: end;
+  }
+
+  .talk-slide-content .next-label {
+    grid-column: 1 / -1;
+  }
+
+  .talk-slide-content h1 {
+    max-width: 11ch;
+    font-size: clamp(4rem, 8.4vw, 10.5rem);
+    font-weight: 850;
+    line-height: 0.84;
+  }
+
+  .talk-slide-speakers {
+    display: grid;
+    gap: clamp(1rem, 2vh, 1.6rem);
+    align-self: stretch;
+  }
+
+  .talk-slide-speaker {
+    display: grid;
+    grid-template-columns: clamp(7.5rem, 13vw, 13rem) minmax(0, 1fr);
+    gap: clamp(1rem, 2vw, 1.7rem);
+    align-items: center;
+    border-top: 1px solid rgb(255 255 255 / 0.46);
+    padding-top: clamp(0.9rem, 1.8vh, 1.4rem);
+  }
+
+  .talk-slide-speaker img {
+    width: clamp(7.5rem, 13vw, 13rem);
+    height: clamp(7.5rem, 13vw, 13rem);
+    border-radius: 999px;
+    object-fit: cover;
+    filter: grayscale(1);
+  }
+
+  .talk-slide-speaker figcaption {
+    color: rgb(255 255 255 / 0.84);
+    font-size: clamp(2rem, 3.8vw, 4.4rem);
+    line-height: 0.9;
+  }
+
   .sponsor-strip {
     border-top: 1px solid rgb(255 255 255 / 0.55);
     padding-top: clamp(0.8rem, 1.8vh, 1.4rem);
@@ -230,6 +278,28 @@
 
     .talk-grid {
       grid-template-columns: 1fr;
+    }
+
+    .talk-slide-content {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    .talk-slide-content h1 {
+      font-size: clamp(2.6rem, 13vw, 5.4rem);
+    }
+
+    .talk-slide-speaker {
+      grid-template-columns: clamp(4.6rem, 18vw, 6.5rem) minmax(0, 1fr);
+    }
+
+    .talk-slide-speaker img {
+      width: clamp(4.6rem, 18vw, 6.5rem);
+      height: clamp(4.6rem, 18vw, 6.5rem);
+    }
+
+    .talk-slide-speaker figcaption {
+      font-size: clamp(1.55rem, 7vw, 2.8rem);
     }
 
     .sponsor-strip {

@@ -13,6 +13,8 @@ describe("renderHomePage", () => {
     expect(html).toContain("Ending of the day");
     expect(html).toContain("Designing futures");
     expect(html).toContain("Agentic use cases");
+    expect(html).toContain("We Don&#39;t Have an Idea Problem. We Have a Permission Problem.");
+    expect(html).toContain("talk-slide-speaker");
     expect(html).toContain("talk-grid-3");
     expect(html).toContain("Ohjelmistofriikit");
     expect(html).toContain("/assets/ff26-logo.svg");
@@ -20,6 +22,6 @@ describe("renderHomePage", () => {
     expect(html).toContain('rel="stylesheet" href="/styles.css"');
     expect(html).not.toContain("slide-count");
     expect(html).not.toContain("Stryker was here!");
-    expect(html.match(/data-break-slide/g)).toHaveLength(12);
+    expect(html.match(/data-break-slide/g)).toHaveLength(29);
   });
 });
