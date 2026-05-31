@@ -40,9 +40,12 @@ describe("renderSlideDeckPage", () => {
     expect(html).toContain("talk-title-dense");
     expect(html).toContain("talk-grid-3");
     expect(html).toContain("Ohjelmistofriikit");
+    expect(html).toContain('src="/img/pasi.webp"');
+    expect(html).toContain('src="/img/ohjelmistofriikit-black.svg"');
     expect(html).toContain("/assets/ff26-logo.svg");
     expect(html).toContain('type="module" src="/slides.js"');
     expect(html).toContain('rel="stylesheet" href="/styles.css"');
+    expect(html).not.toContain("https://futurefrontend.com/img/");
     expect(html).not.toContain("slide-count");
     expect(html).not.toContain("Stryker was here!");
     expect(html.match(/data-break-slide/g)).toHaveLength(42);

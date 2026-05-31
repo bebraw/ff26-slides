@@ -21,6 +21,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - **Print layout:** `src/tailwind-input.css` includes print media rules for A4 portrait schedule and speaker check-in sheets.
 - **Client build:** `npm run build:client` compiles the typed client module to `.generated/client/slides.js`, copies the served text asset to `.generated/client/slides.client.txt`, and `npm run build` runs both CSS and client builds.
 - **Assets:** The deck serves the provided Future Frontend logo at `/assets/ff26-logo.svg` and Finlandica Headline at `/fonts/FinlandicaHeadline-Regular.ttf`.
+- **Conference image proxy:** `GET /img/*` fetches matching `futurefrontend.com/img/*` speaker and sponsor images server-side so rendered pages do not hotlink browser image requests to the main conference site.
 - **Styling:** `src/tailwind-input.css` defines the black-and-white 16:9 slide layout and uses Finlandica Headline.
 - **Sponsor strip:** Tech sponsors receive larger logo slots than brand sponsors in one horizontal footer strip.
 
@@ -63,6 +64,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - `GET /schedule` must keep rendering daily schedule sheets from the same slide data.
 - `GET /speaker-checkin` must keep rendering speaker check-in sheets from the same slide data.
 - `GET /slides.js` must return the built typed navigation module.
+- `GET /img/*` must return conference speaker and sponsor images from the main conference site without exposing an open proxy.
 - `GET /assets/ff26-logo.svg` must return the conference logo.
 - `GET /fonts/FinlandicaHeadline-Regular.ttf` must return the Finlandica font.
 - Worker/view runtime files must remain free of inline script bodies, inline event handlers, and `javascript:` URLs.

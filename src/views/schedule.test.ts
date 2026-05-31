@@ -56,6 +56,7 @@ describe("renderSchedulePage", () => {
     expect(html).toContain("Second Speaker");
     expect(html).toContain("/img/first.webp");
     expect(html).toContain("/img/second.webp");
+    expect(html).not.toContain("https://futurefrontend.com/img/");
     expect(html).toContain('data-slide-number="2"');
     expect(html).not.toContain("Stryker was here!");
   });

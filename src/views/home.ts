@@ -174,24 +174,30 @@ function renderTalk(talkItem: Talk): string {
 
 function renderSpeaker(speakerItem: Speaker): string {
   return `<figure class="speaker">
-    <img src="${escapeHtml(toConferenceAssetUrl(speakerItem.image))}" alt="${escapeHtml(speakerItem.name)}" width="204" height="204">
+    <img src="${escapeHtml(toServedAssetUrl(speakerItem.image))}" alt="${escapeHtml(speakerItem.name)}" width="204" height="204">
     <figcaption>${escapeHtml(speakerItem.name)}</figcaption>
   </figure>`;
 }
 
 function renderTalkSlideSpeaker(speakerItem: Speaker): string {
   return `<figure class="talk-slide-speaker">
-    <img src="${escapeHtml(toConferenceAssetUrl(speakerItem.image))}" alt="${escapeHtml(speakerItem.name)}" width="420" height="420">
+    <img src="${escapeHtml(toServedAssetUrl(speakerItem.image))}" alt="${escapeHtml(speakerItem.name)}" width="420" height="420">
     <figcaption>${escapeHtml(speakerItem.name)}</figcaption>
   </figure>`;
 }
 
 function renderSponsor(sponsor: Sponsor): string {
   return `<div class="sponsor sponsor-${sponsor.size}">
-    <img src="${escapeHtml(toConferenceAssetUrl(sponsor.image))}" alt="${escapeHtml(sponsor.name)}">
+    <img src="${escapeHtml(toServedAssetUrl(sponsor.image))}" alt="${escapeHtml(sponsor.name)}">
   </div>`;
 }
 
-function toConferenceAssetUrl(path: string): string {
-  return new URL(path, assetBaseUrl).toString();
+function toServedAssetUrl(path: string): string {
+  const url = new URL(path, assetBaseUrl);
+
+  if (url.hostname === "futurefrontend.com" && url.pathname.startsWith("/img/")) {
+    return `${url.pathname}${url.search}`;
+  }
+
+  return url.toString();
 }

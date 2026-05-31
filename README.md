@@ -19,8 +19,8 @@ The root route is an index of available slide and print tools. The `/slides` rou
 ## Slide Content
 
 - Session fallback data lives in `src/break-slides.json`; `npm run sync:slides` refreshes the generated `.generated/break-slides.json` artifact from the Future Frontend GraphQL API.
-- Speaker images are loaded from the URLs stored in the synced schedule data.
-- Sponsor images are loaded from `https://futurefrontend.com/img/...`.
+- Speaker images are loaded from the URLs stored in the synced schedule data and served through this Worker when they point to `futurefrontend.com/img/...`.
+- Sponsor images are served through this Worker from the `futurefrontend.com/img/...` source assets.
 - The provided Future Frontend logo is served from `src/assets/ff26-logo.svg`.
 - Finlandica Headline Regular is served from `src/assets/FinlandicaHeadline-Regular.ttf`.
 

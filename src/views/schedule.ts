@@ -93,11 +93,17 @@ function renderTalk(talk: Talk): string {
 
 function renderSpeaker(speaker: Speaker): string {
   return `<figure>
-    <img src="${escapeHtml(toConferenceAssetUrl(speaker.image))}" alt="${escapeHtml(speaker.name)}" width="96" height="96">
+    <img src="${escapeHtml(toServedAssetUrl(speaker.image))}" alt="${escapeHtml(speaker.name)}" width="96" height="96">
     <figcaption>${escapeHtml(speaker.name)}</figcaption>
   </figure>`;
 }
 
-function toConferenceAssetUrl(path: string): string {
-  return new URL(path, assetBaseUrl).toString();
+function toServedAssetUrl(path: string): string {
+  const url = new URL(path, assetBaseUrl);
+
+  if (url.hostname === "futurefrontend.com" && url.pathname.startsWith("/img/")) {
+    return `${url.pathname}${url.search}`;
+  }
+
+  return url.toString();
 }

@@ -28,6 +28,10 @@ export async function handleRequest(request: Request): Promise<Response> {
     return assetResponse(await loadLogo(), "image/svg+xml; charset=utf-8");
   }
 
+  if (url.pathname.startsWith("/img/")) {
+    return await loadConferenceImage(url);
+  }
+
   if (url.pathname === "/fonts/FinlandicaHeadline-Regular.ttf") {
     return assetResponse(await loadFont(), "font/ttf");
   }
@@ -131,4 +135,27 @@ async function loadFont(): Promise<ArrayBuffer> {
 
   const font = await import("./assets/FinlandicaHeadline-Regular.ttf");
   return font.default;
+}
+
+async function loadConferenceImage(url: URL): Promise<Response> {
+  const sourceUrl = new URL(`${url.pathname}${url.search}`, "https://futurefrontend.com");
+  const response = await fetch(sourceUrl);
+
+  if (!response.ok) {
+    return new Response("Image not found", {
+      status: response.status,
+      headers: {
+        "content-type": "text/plain; charset=utf-8",
+        "cache-control": "no-store",
+      },
+    });
+  }
+
+  return new Response(response.body, {
+    status: response.status,
+    headers: {
+      "content-type": response.headers.get("content-type") ?? "application/octet-stream",
+      "cache-control": "public, max-age=14400, must-revalidate",
+    },
+  });
 }

@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import worker, { handleRequest } from "./worker";
@@ -7,6 +7,10 @@ import { ensureGeneratedBreakSlides, ensureGeneratedClientScript, ensureGenerate
 ensureGeneratedBreakSlides();
 ensureGeneratedStylesheet();
 ensureGeneratedClientScript();
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
 
 describe("worker", () => {
   it("renders the index page", async () => {
@@ -159,6 +163,30 @@ describe("worker", () => {
     expect(fontResponse.status).toBe(200);
     expect(fontResponse.headers.get("content-type")).toContain("font/ttf");
     expect((await fontResponse.arrayBuffer()).byteLength).toBeGreaterThan(100_000);
+  });
+
+  it("serves conference images through the Worker", async () => {
+    const fetchMock = vi.fn(async () => new Response("speaker image", { headers: { "content-type": "image/webp" } }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    const response = await handleRequest(new Request("http://example.com/img/pasi.webp"));
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toBe("image/webp");
+    expect(response.headers.get("cache-control")).toBe("public, max-age=14400, must-revalidate");
+    await expect(response.text()).resolves.toBe("speaker image");
+    expect(fetchMock).toHaveBeenCalledWith(new URL("https://futurefrontend.com/img/pasi.webp"));
+  });
+
+  it("returns the upstream status for missing conference images", async () => {
+    vi.stubGlobal("fetch", async () => new Response("missing", { status: 404 }));
+
+    const response = await handleRequest(new Request("http://example.com/img/missing.webp"));
+
+    expect(response.status).toBe(404);
+    expect(response.headers.get("content-type")).toContain("text/plain");
+    expect(response.headers.get("cache-control")).toBe("no-store");
+    await expect(response.text()).resolves.toBe("Image not found");
   });
 });
 
