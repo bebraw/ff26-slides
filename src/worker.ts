@@ -3,6 +3,7 @@ import { exampleRoutes } from "./app-routes";
 import { emptySlideData, parseSlideData, type SlideData } from "./slide-data";
 import { renderHomePage } from "./views/home";
 import { renderNotFoundPage } from "./views/not-found";
+import { renderSchedulePage } from "./views/schedule";
 import { assetResponse, cssResponse, htmlResponse, javascriptResponse } from "./views/shared";
 
 export default {
@@ -32,6 +33,10 @@ export async function handleRequest(request: Request): Promise<Response> {
 
   if (url.pathname === "/") {
     return htmlResponse(renderHomePage(exampleRoutes, await loadSlideData()));
+  }
+
+  if (url.pathname === "/schedule") {
+    return htmlResponse(renderSchedulePage(await loadSlideData()));
   }
 
   if (url.pathname === "/api/health") {

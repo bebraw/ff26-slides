@@ -286,6 +286,142 @@
     margin-left: auto;
   }
 
+  .schedule-page {
+    min-height: 100vh;
+    background: #e8e3d7;
+    color: #101010;
+  }
+
+  .schedule-deck {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: clamp(1rem, 3vw, 2.5rem);
+  }
+
+  .schedule-sheet {
+    display: none;
+    width: min(100%, 72rem);
+    min-height: min(100vh - 5rem, 52rem);
+    grid-template-rows: auto 1fr;
+    gap: clamp(1.1rem, 2vw, 1.7rem);
+    background: #fffdf8;
+    border: 1px solid rgb(16 16 16 / 0.16);
+    padding: clamp(1.1rem, 2.8vw, 2.7rem);
+    box-shadow: 0 24px 64px -44px rgb(16 16 16 / 0.54);
+  }
+
+  .schedule-sheet[data-active-slide="true"] {
+    display: grid;
+  }
+
+  .schedule-sheet-header {
+    display: grid;
+    grid-template-columns: minmax(8rem, 13rem) minmax(0, 1fr);
+    gap: clamp(1.2rem, 2.8vw, 2.6rem);
+    align-items: end;
+    border-bottom: 0.16rem solid #101010;
+    padding-bottom: clamp(0.8rem, 1.5vw, 1.2rem);
+  }
+
+  .schedule-logo {
+    width: 100%;
+    max-height: 5.5rem;
+    object-fit: contain;
+  }
+
+  .schedule-sheet-header p {
+    color: rgb(16 16 16 / 0.62);
+    font-size: clamp(0.9rem, 1.5vw, 1.25rem);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .schedule-sheet-header h1 {
+    margin-top: 0.35rem;
+    font-size: clamp(2.4rem, 5vw, 5rem);
+    font-weight: 850;
+    line-height: 0.86;
+  }
+
+  .schedule-list {
+    display: grid;
+    gap: clamp(0.65rem, 1.2vw, 1rem);
+    align-content: start;
+    list-style: none;
+  }
+
+  .schedule-item {
+    display: grid;
+    grid-template-columns: minmax(5.7rem, 8rem) minmax(0, 1fr);
+    gap: clamp(0.8rem, 1.6vw, 1.5rem);
+    border-bottom: 1px solid rgb(16 16 16 / 0.18);
+    padding-bottom: clamp(0.55rem, 1vw, 0.85rem);
+  }
+
+  .schedule-item time {
+    color: rgb(16 16 16 / 0.64);
+    font-size: clamp(1rem, 1.6vw, 1.35rem);
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .schedule-item-main {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .schedule-item h2 {
+    font-size: clamp(1.45rem, 2.7vw, 2.4rem);
+    font-weight: 760;
+    line-height: 0.95;
+  }
+
+  .schedule-talks {
+    display: grid;
+    gap: 0.5rem;
+    list-style: none;
+  }
+
+  .schedule-talks li {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .schedule-talks h3 {
+    color: rgb(16 16 16 / 0.78);
+    font-size: clamp(1rem, 1.65vw, 1.42rem);
+    font-weight: 560;
+    line-height: 1.04;
+  }
+
+  .schedule-speakers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.8rem;
+  }
+
+  .schedule-speakers figure {
+    display: flex;
+    align-items: center;
+    gap: 0.38rem;
+    min-width: 0;
+  }
+
+  .schedule-speakers img {
+    width: clamp(1.65rem, 2.7vw, 2.2rem);
+    height: clamp(1.65rem, 2.7vw, 2.2rem);
+    border-radius: 999px;
+    object-fit: cover;
+    filter: grayscale(1);
+  }
+
+  .schedule-speakers figcaption {
+    color: rgb(16 16 16 / 0.62);
+    font-size: clamp(0.85rem, 1.25vw, 1.08rem);
+    line-height: 1;
+  }
+
   @media (max-width: 760px) {
     .break-slide {
       padding: 1rem;
@@ -357,6 +493,110 @@
 
     .sponsor-brand {
       margin-left: 0;
+    }
+
+    .schedule-deck {
+      place-items: stretch;
+      padding: 0.8rem;
+    }
+
+    .schedule-sheet {
+      min-height: calc(100vh - 1.6rem);
+    }
+
+    .schedule-sheet-header,
+    .schedule-item {
+      grid-template-columns: 1fr;
+    }
+
+    .schedule-logo {
+      width: 10rem;
+    }
+  }
+
+  @media print {
+    @page {
+      size: A4 portrait;
+      margin: 12mm;
+    }
+
+    html,
+    body,
+    .schedule-page {
+      background: #fff;
+    }
+
+    .schedule-page {
+      min-height: auto;
+      color: #000;
+    }
+
+    .schedule-deck {
+      display: block;
+      min-height: auto;
+      padding: 0;
+    }
+
+    .schedule-sheet,
+    .schedule-sheet[data-active-slide="true"] {
+      display: grid;
+      width: auto;
+      min-height: calc(297mm - 24mm);
+      box-shadow: none;
+      border: 0;
+      padding: 0;
+      break-after: page;
+      page-break-after: always;
+    }
+
+    .schedule-sheet:last-child {
+      break-after: auto;
+      page-break-after: auto;
+    }
+
+    .schedule-sheet[aria-hidden="true"] {
+      display: grid;
+    }
+
+    .schedule-sheet-header {
+      grid-template-columns: 38mm 1fr;
+      gap: 12mm;
+      padding-bottom: 6mm;
+    }
+
+    .schedule-sheet-header h1 {
+      font-size: 34pt;
+    }
+
+    .schedule-sheet-header p,
+    .schedule-item time,
+    .schedule-speakers figcaption {
+      color: #333;
+    }
+
+    .schedule-list {
+      gap: 4mm;
+    }
+
+    .schedule-item {
+      grid-template-columns: 28mm 1fr;
+      gap: 7mm;
+      padding-bottom: 3.5mm;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .schedule-item h2 {
+      font-size: 17pt;
+    }
+
+    .schedule-talks h3 {
+      font-size: 10.5pt;
+    }
+
+    .schedule-speakers img {
+      width: 8mm;
+      height: 8mm;
     }
   }
 }

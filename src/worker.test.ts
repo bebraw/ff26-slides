@@ -33,8 +33,22 @@ describe("worker", () => {
     await expect(response.json()).resolves.toEqual({
       ok: true,
       name: "vibe-template-worker",
-      routes: ["/", "/api/health", "/slides.js"],
+      routes: ["/", "/schedule", "/api/health", "/slides.js"],
     });
+  });
+
+  it("renders the printable schedule", async () => {
+    const response = await handleRequest(new Request("http://example.com/schedule"));
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toContain("text/html");
+
+    const body = await response.text();
+    expect(body).toContain("Future Frontend 2026 Schedule");
+    expect(body).toContain("Daily schedule");
+    expect(body).toContain("Monday, 8 June");
+    expect(body).toContain("Tuesday, 9 June");
+    expect(body).toContain("/slides.js");
   });
 
   it("returns a not found page for unknown routes", async () => {

@@ -67,8 +67,24 @@ test("serves the health endpoint", async ({ request }) => {
   await expect(response.json()).resolves.toEqual({
     ok: true,
     name: "vibe-template-worker",
-    routes: ["/", "/api/health", "/slides.js"],
+    routes: ["/", "/schedule", "/api/health", "/slides.js"],
   });
+});
+
+test("renders printable daily schedules with slide navigation", async ({ page }) => {
+  await page.goto("/schedule", { waitUntil: "domcontentloaded" });
+
+  await expect(page.getByRole("heading", { level: 1, name: "Monday, 8 June" })).toBeVisible();
+  await expect(page.locator('[data-active-slide="true"]').getByText("Conference registration")).toBeVisible();
+
+  await page.keyboard.press("ArrowRight");
+  await expect(page).toHaveURL(/slide=2/);
+  await expect(page.getByRole("heading", { level: 1, name: "Tuesday, 9 June" })).toBeVisible();
+
+  await page.emulateMedia({ media: "print" });
+  await expect(page.locator(".schedule-sheet")).toHaveCount(4);
+  await expect(page.locator(".schedule-sheet").nth(2).locator("h1")).toContainText(/Wednesday,? 10 June/u);
+  await expect(page.locator(".schedule-sheet").nth(2)).toBeVisible();
 });
 
 test("serves the generated stylesheet", async ({ request }) => {
