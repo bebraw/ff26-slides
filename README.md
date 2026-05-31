@@ -2,7 +2,7 @@
 
 This repo serves a local Cloudflare Worker slide deck for the Future Frontend 2026 beamer between sessions. The deck is server-rendered HTML with generated Tailwind CSS and a small typed browser module for keyboard navigation.
 
-The root route shows the break slides. Session overview slides present the upcoming session, related talks, speaker names and pictures, the Future Frontend logo, and a single sponsor strip with larger tech sponsor slots and smaller brand sponsor slots. Each talk also gets a standalone title slide for use before the presentation or in post-production. The `/schedule` route shows one day schedule at a time and prints all days as A4 sheets.
+The root route shows the break slides. Session overview slides present the upcoming session, related talks, speaker names and pictures, the Future Frontend logo, and a single sponsor strip with larger tech sponsor slots and smaller brand sponsor slots. Each talk also gets a standalone title slide for use before the presentation or in post-production. The `/schedule` route shows one day schedule at a time and prints all days as A4 sheets. The `/speaker-checkin` route prints daily speaker check-in sheets for organizer use.
 
 ## Running
 
@@ -13,6 +13,7 @@ The root route shows the break slides. Session overview slides present the upcom
 - Use the left and right arrow keys to move between session, talk, and schedule slides.
 - The current slide is persisted in the URL as `?slide=<number>`, using one-based slide numbers.
 - Open `/schedule` for daily schedules. Use the same arrow key navigation on screen, or print the page to generate one A4 sheet per day.
+- Open `/speaker-checkin` for daily speaker check-in sheets with arrival, microphone, slides, and notes columns. It uses the same arrow key navigation on screen, and prints the talk days as A4 sheets.
 
 ## Slide Content
 
@@ -77,6 +78,7 @@ For documentation-only changes that do not alter executable behavior or workflow
 - `src/worker.ts` is the Worker entry point and top-level router.
 - `src/views/home.ts` renders the break slide deck.
 - `src/views/schedule.ts` renders the printable daily schedules.
+- `src/views/speaker-checkin.ts` renders printable speaker check-in sheets.
 - `src/client/slides.ts` contains typed browser navigation behavior.
 - `src/tailwind-input.css` defines the slide layout and visual system.
 - `src/assets/` contains the local logo and font assets.

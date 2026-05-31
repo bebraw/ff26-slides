@@ -33,7 +33,7 @@ describe("worker", () => {
     await expect(response.json()).resolves.toEqual({
       ok: true,
       name: "vibe-template-worker",
-      routes: ["/", "/schedule", "/api/health", "/slides.js"],
+      routes: ["/", "/schedule", "/speaker-checkin", "/api/health", "/slides.js"],
     });
   });
 
@@ -48,6 +48,21 @@ describe("worker", () => {
     expect(body).toContain("Daily schedule");
     expect(body).toContain("Monday, 8 June");
     expect(body).toContain("Tuesday, 9 June");
+    expect(body).toContain("/slides.js");
+  });
+
+  it("renders the speaker check-in sheet", async () => {
+    const response = await handleRequest(new Request("http://example.com/speaker-checkin"));
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toContain("text/html");
+
+    const body = await response.text();
+    expect(body).toContain("Future Frontend 2026 Speaker Check-In");
+    expect(body).toContain("Speaker check-in");
+    expect(body).toContain("Pasi Sillanpää");
+    expect(body).toContain("Arrived");
+    expect(body).toContain("Slides received");
     expect(body).toContain("/slides.js");
   });
 

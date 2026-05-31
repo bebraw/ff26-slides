@@ -4,6 +4,7 @@ import { emptySlideData, parseSlideData, type SlideData } from "./slide-data";
 import { renderHomePage } from "./views/home";
 import { renderNotFoundPage } from "./views/not-found";
 import { renderSchedulePage } from "./views/schedule";
+import { renderSpeakerCheckInPage } from "./views/speaker-checkin";
 import { assetResponse, cssResponse, htmlResponse, javascriptResponse } from "./views/shared";
 
 export default {
@@ -37,6 +38,10 @@ export async function handleRequest(request: Request): Promise<Response> {
 
   if (url.pathname === "/schedule") {
     return htmlResponse(renderSchedulePage(await loadSlideData()));
+  }
+
+  if (url.pathname === "/speaker-checkin") {
+    return htmlResponse(renderSpeakerCheckInPage(await loadSlideData()));
   }
 
   if (url.pathname === "/api/health") {

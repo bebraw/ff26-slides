@@ -422,6 +422,98 @@
     line-height: 1;
   }
 
+  .checkin-sheet {
+    width: min(100%, 76rem);
+  }
+
+  .checkin-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: clamp(0.92rem, 1.2vw, 1.05rem);
+  }
+
+  .checkin-table th {
+    color: rgb(16 16 16 / 0.54);
+    font-size: 0.78em;
+    font-weight: 700;
+    line-height: 1;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .checkin-table th,
+  .checkin-table td {
+    border-bottom: 1px solid rgb(16 16 16 / 0.18);
+    padding: clamp(0.55rem, 1vw, 0.8rem) clamp(0.45rem, 0.85vw, 0.7rem);
+    vertical-align: top;
+  }
+
+  .checkin-table th:nth-child(1),
+  .checkin-table td:nth-child(1) {
+    width: 8.5rem;
+  }
+
+  .checkin-table th:nth-child(3),
+  .checkin-table th:nth-child(4),
+  .checkin-table th:nth-child(5),
+  .checkin-table td:nth-child(3),
+  .checkin-table td:nth-child(4),
+  .checkin-table td:nth-child(5) {
+    width: 5.8rem;
+    text-align: center;
+  }
+
+  .checkin-table th:nth-child(6),
+  .checkin-table td:nth-child(6) {
+    width: 10rem;
+  }
+
+  .checkin-time {
+    color: rgb(16 16 16 / 0.66);
+    font-size: clamp(1rem, 1.35vw, 1.2rem);
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .checkin-talk {
+    display: grid;
+    gap: 0.28rem;
+  }
+
+  .checkin-session {
+    color: rgb(16 16 16 / 0.54);
+    font-size: 0.82em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .checkin-talk h2 {
+    font-size: clamp(1.12rem, 1.85vw, 1.55rem);
+    font-weight: 760;
+    line-height: 1;
+  }
+
+  .checkin-speakers {
+    color: rgb(16 16 16 / 0.68);
+    font-size: clamp(0.92rem, 1.25vw, 1.05rem);
+    line-height: 1.15;
+  }
+
+  .checkin-box {
+    display: inline-block;
+    width: clamp(1.35rem, 2vw, 1.65rem);
+    height: clamp(1.35rem, 2vw, 1.65rem);
+    border: 0.14rem solid #101010;
+    vertical-align: top;
+  }
+
+  .checkin-notes {
+    display: block;
+    min-height: 2.6rem;
+    border-bottom: 1px solid rgb(16 16 16 / 0.45);
+  }
+
   @media (max-width: 760px) {
     .break-slide {
       padding: 1rem;
@@ -512,6 +604,57 @@
     .schedule-logo {
       width: 10rem;
     }
+
+    .checkin-table,
+    .checkin-table thead,
+    .checkin-table tbody,
+    .checkin-table tr,
+    .checkin-table th,
+    .checkin-table td {
+      display: block;
+      width: 100%;
+    }
+
+    .checkin-table thead {
+      display: none;
+    }
+
+    .checkin-table tr {
+      border-bottom: 1px solid rgb(16 16 16 / 0.18);
+      padding: 0.75rem 0;
+    }
+
+    .checkin-table td {
+      border-bottom: 0;
+      padding: 0.35rem 0;
+    }
+
+    .checkin-table td:nth-child(3),
+    .checkin-table td:nth-child(4),
+    .checkin-table td:nth-child(5) {
+      display: inline-flex;
+      width: auto;
+      min-width: 5.8rem;
+      align-items: center;
+      gap: 0.45rem;
+      text-align: left;
+    }
+
+    .checkin-table td:nth-child(3)::before {
+      content: "Arrived";
+    }
+
+    .checkin-table td:nth-child(4)::before {
+      content: "Mic";
+    }
+
+    .checkin-table td:nth-child(5)::before {
+      content: "Slides";
+    }
+
+    .checkin-table td:nth-child(6) {
+      width: 100%;
+    }
   }
 
   @media print {
@@ -597,6 +740,62 @@
     .schedule-speakers img {
       width: 8mm;
       height: 8mm;
+    }
+
+    .checkin-sheet {
+      gap: 7mm;
+    }
+
+    .checkin-table {
+      font-size: 9.2pt;
+    }
+
+    .checkin-table th,
+    .checkin-table td {
+      padding: 2.6mm 2mm;
+    }
+
+    .checkin-table th:nth-child(1),
+    .checkin-table td:nth-child(1) {
+      width: 25mm;
+    }
+
+    .checkin-table th:nth-child(3),
+    .checkin-table th:nth-child(4),
+    .checkin-table th:nth-child(5),
+    .checkin-table td:nth-child(3),
+    .checkin-table td:nth-child(4),
+    .checkin-table td:nth-child(5) {
+      width: 15mm;
+    }
+
+    .checkin-table th:nth-child(6),
+    .checkin-table td:nth-child(6) {
+      width: 28mm;
+    }
+
+    .checkin-table tr {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .checkin-session,
+    .checkin-speakers {
+      color: #333;
+    }
+
+    .checkin-talk h2 {
+      font-size: 11pt;
+    }
+
+    .checkin-box {
+      width: 5.5mm;
+      height: 5.5mm;
+      border-width: 0.45mm;
+    }
+
+    .checkin-notes {
+      min-height: 11mm;
     }
   }
 }
