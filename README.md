@@ -21,7 +21,7 @@ The root route shows the break slides. Session overview slides present the upcom
 - The provided Future Frontend logo is served from `src/assets/ff26-logo.svg`.
 - Finlandica Headline Regular is served from `src/assets/FinlandicaHeadline-Regular.ttf`.
 
-To sync schedule changes locally, copy `.dev.vars.example` to `.dev.vars`, set `FF26_GRAPHQL_URL`, `FF26_GRAPHQL_TOKEN`, and `FF26_CONFERENCE_ID`, then run `npm run sync:slides`. The token is used only by the sync script and must not be committed.
+To sync schedule changes locally, copy `.dev.vars.example` to `.dev.vars`, set `FF26_GRAPHQL_URL`, `FF26_GRAPHQL_TOKEN`, and `FF26_CONFERENCE_ID`, then run `npm run sync:slides`. The required secret names are declared in `wrangler.jsonc`, but the values live only in `.dev.vars`, shell/CI environment variables, or Cloudflare secrets. Do not commit them.
 
 The sync script writes `.generated/break-slides.json`, which is ignored by git. Inspect the generated JSON after every sync because the speaker order, session grouping, and schedule-only intervals are production-facing slide content.
 
@@ -52,6 +52,14 @@ npm run sync:slides && npm run build
 Keep normal Worker runtime requests token-free. The public Worker should serve the already-synced slide data and generated assets; it should not call the GraphQL API when attendees load the deck.
 
 If the Cloudflare job performs deployment directly, run `npm run deploy` after the sync and build steps. If the hook is a build-only trigger managed by Cloudflare, make sure its configured build command includes `npm run sync:slides && npm run build`.
+
+For direct Wrangler deploys, set the required Worker secrets before deploying:
+
+```sh
+npx wrangler secret put FF26_GRAPHQL_URL
+npx wrangler secret put FF26_GRAPHQL_TOKEN
+npx wrangler secret put FF26_CONFERENCE_ID
+```
 
 ## Verification
 

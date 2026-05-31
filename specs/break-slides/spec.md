@@ -12,6 +12,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - **Slide source:** `.generated/break-slides.json` contains the generated 2026 conference session data consumed by the Worker when present.
 - **Fallback data:** `src/break-slides.json` contains committed fallback slide data for clean local builds and tests.
 - **Schedule sync:** `npm run sync:slides` refreshes `.generated/break-slides.json` from the Future Frontend GraphQL API using `FF26_GRAPHQL_URL`, `FF26_GRAPHQL_TOKEN`, and `FF26_CONFERENCE_ID`.
+- **Secret declaration:** `wrangler.jsonc` declares the required GraphQL secret names, while actual values stay in `.dev.vars`, shell/CI environment variables, or Cloudflare secrets.
 - **Talk slides:** `src/views/home.ts` derives one standalone slide per talk from the same session data, directly after the containing session overview slide.
 - **Navigation:** `src/client/slides.ts` handles left/right arrow navigation and stores the current slide in the `slide` query parameter.
 - **Client build:** `npm run build:client` compiles the typed client module to `.generated/client/slides.js`, copies the served text asset to `.generated/client/slides.client.txt`, and `npm run build` runs both CSS and client builds.
@@ -25,6 +26,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - Do not add a heavyweight slideshow framework for this small keyboard-controlled deck.
 - Do not call the GraphQL API from public Worker request handling.
 - Do not commit GraphQL tokens or other sync secrets.
+- Do not put GraphQL secret values in `wrangler.jsonc`; declare only their names.
 - Do not rely on the README or tests as the only durable source of slide behavior.
 - Do not let sponsor layout dominate the upcoming-session content.
 

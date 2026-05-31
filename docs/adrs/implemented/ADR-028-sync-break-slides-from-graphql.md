@@ -26,6 +26,8 @@ It sends the token as a `TOKEN` header, queries the conference schedule, normali
 
 `src/break-slides.json` remains a committed fallback for clean local builds and tests. `npm run build` copies that JSON fallback to `.generated/break-slides.json` when no synced artifact exists.
 
+`wrangler.jsonc` declares the required GraphQL secret names through `secrets.required`, but it never stores the values. Local values stay in `.dev.vars` or the shell environment, and deployed values are configured as Cloudflare secrets.
+
 The public Worker continues to serve only committed or deployment-generated slide data. It does not call the GraphQL API during request handling.
 
 ## Consequences
