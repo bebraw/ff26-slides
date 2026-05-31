@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 import worker, { handleRequest } from "./worker";
-import { ensureGeneratedClientScript, ensureGeneratedStylesheet } from "./test-support";
+import { ensureGeneratedBreakSlides, ensureGeneratedClientScript, ensureGeneratedStylesheet } from "./test-support";
 
+ensureGeneratedBreakSlides();
 ensureGeneratedStylesheet();
 ensureGeneratedClientScript();
 
@@ -15,6 +18,9 @@ describe("worker", () => {
 
     const body = await response.text();
     expect(body).toContain("Future Frontend 2026 Break Slides");
+    expect(body).toContain("Conference registration");
+    expect(body).toContain("Welcome");
+    expect(body).toContain("Break");
     expect(body).toContain("Designing futures");
     expect(body).toContain("/slides.js");
   });
@@ -58,6 +64,37 @@ describe("worker", () => {
     await expect(response.text()).resolves.toContain("--color-app-canvas:#f3eee6");
   });
 
+  it("renders generated break slide data when present", async () => {
+    writeGeneratedBreakSlides({
+      breakSlides: [
+        {
+          day: "Wednesday, 10 June",
+          time: "10:00-10:30",
+          session: "Generated session",
+        },
+      ],
+      sponsors: [],
+    });
+
+    const response = await handleRequest(new Request("http://example.com/"));
+
+    await expect(response.text()).resolves.toContain("Generated session");
+    ensureGeneratedBreakSlides();
+  });
+
+  it("falls back to committed break slide data when generated data is missing or invalid", async () => {
+    rmSync(join(".generated", "break-slides.json"), { force: true });
+    const missingResponse = await handleRequest(new Request("http://example.com/"));
+
+    await expect(missingResponse.text()).resolves.toContain("Designing futures");
+
+    writeGeneratedBreakSlides({ breakSlides: [], sponsors: "not valid" });
+    const invalidResponse = await handleRequest(new Request("http://example.com/"));
+
+    await expect(invalidResponse.text()).resolves.toContain("Designing futures");
+    ensureGeneratedBreakSlides();
+  });
+
   it("serves the slide navigation module", async () => {
     const response = await handleRequest(new Request("http://example.com/slides.js"));
 
@@ -80,3 +117,8 @@ describe("worker", () => {
     expect((await fontResponse.arrayBuffer()).byteLength).toBeGreaterThan(100_000);
   });
 });
+
+function writeGeneratedBreakSlides(value: unknown): void {
+  mkdirSync(".generated", { recursive: true });
+  writeFileSync(join(".generated", "break-slides.json"), JSON.stringify(value), "utf8");
+}

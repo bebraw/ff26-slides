@@ -13,9 +13,10 @@
     }
   },
   "scripts": {
-    "build": "npm run build:css && npm run build:client",
+    "build": "npm run build:slides && npm run build:css && npm run build:client",
     "build:client": "tsc src/client/slides.ts --ignoreConfig --outDir .generated/client --target ES2022 --module ES2022 --moduleResolution Bundler --strict --lib ES2022,DOM --skipLibCheck --noEmit false --declaration false --sourceMap false && cp .generated/client/slides.js .generated/client/slides.client.txt",
     "build:css": "mkdir -p ./.generated && tailwindcss -i ./src/tailwind-input.css -o ./.generated/styles.css --minify",
+    "build:slides": "node ./scripts/write-break-slides-fallback.mjs",
     "ci:local": "agent-ci run --quiet --jobs 1 --workflow .github/workflows/ci.yml",
     "ci:local:retry": "agent-ci retry",
     "deploy": "wrangler deploy",
@@ -32,6 +33,7 @@
     "quality:gate": "npm run quality:gate:fast && npm run e2e && npm run mutation",
     "quality:gate:fast": "npm run format:check && npm run typecheck && npm run worker:client-guard && npm run security:audit && npm run test:coverage",
     "security:audit": "npm audit --omit=dev --audit-level high",
+    "sync:slides": "node ./scripts/sync-break-slides.mjs",
     "test": "vitest run --passWithNoTests",
     "test:coverage": "node ./scripts/run-coverage-gate.mjs",
     "typecheck": "tsc --noEmit",

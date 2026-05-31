@@ -1,0 +1,221 @@
+{
+  "breakSlides": [
+    {
+      "day": "Monday, 8 June",
+      "time": "08:00-08:50",
+      "session": "Conference registration"
+    },
+    {
+      "day": "Monday, 8 June",
+      "time": "08:50-09:00",
+      "session": "Welcome"
+    },
+    {
+      "day": "Monday, 8 June",
+      "time": "09:00-10:30",
+      "session": "Designing futures",
+      "talks": [
+        {
+          "title": "We Don't Have an Idea Problem. We Have a Permission Problem.",
+          "speakers": [{ "name": "Pasi Sillanpää", "image": "/img/pasi.webp" }]
+        },
+        {
+          "title": "Endineering",
+          "speakers": [{ "name": "Joe Macleod", "image": "/img/joe.webp" }]
+        }
+      ]
+    },
+    {
+      "day": "Monday, 8 June",
+      "time": "10:30-11:00",
+      "session": "Break"
+    },
+    {
+      "day": "Monday, 8 June",
+      "time": "11:00-12:30",
+      "session": "Future of work",
+      "talks": [
+        {
+          "title": "Not Loud, Still Powerful - Taking Agency Without Becoming Someone Else",
+          "speakers": [{ "name": "Laura Snellman-Junna", "image": "/img/laura2.webp" }]
+        },
+        {
+          "title": "Designing Leadership Growth in Tech Teams (When Developers Just Want to Code)",
+          "speakers": [{ "name": "Anastasiia Zvenigorodskaia", "image": "/img/anastasiia.webp" }]
+        }
+      ]
+    },
+    {
+      "day": "Monday, 8 June",
+      "time": "12:30-13:30",
+      "session": "Lunch"
+    },
+    {
+      "day": "Monday, 8 June",
+      "time": "13:30-15:00",
+      "session": "Resilience",
+      "talks": [
+        {
+          "title": "This is not the tech I signed up for! - An approach to permacomputing",
+          "speakers": [{ "name": "Darío Gutiérrez Mori", "image": "/img/dario.jpg" }]
+        },
+        {
+          "title": "Building Resilience: Origins",
+          "speakers": [{ "name": "Georgios Diamantopoulos", "image": "/img/georgios.webp" }]
+        }
+      ]
+    },
+    {
+      "day": "Monday, 8 June",
+      "time": "15:00-15:30",
+      "session": "Break"
+    },
+    {
+      "day": "Monday, 8 June",
+      "time": "15:30-17:15",
+      "session": "Accessibility",
+      "talks": [
+        {
+          "title": "Accessibility Adventures - The Lost Secrets of Forced Colors Mode",
+          "speakers": [{ "name": "Daniel Yuschick", "image": "/img/daniel.webp" }]
+        },
+        {
+          "title": "The Cake Is a Lie... And So Is Your Login's Accessibility",
+          "speakers": [{ "name": "Ramona Schwering", "image": "/img/ramona.webp" }]
+        },
+        {
+          "title": "Frontend after AI: The new UX",
+          "speakers": [{ "name": "Tejas Kumar", "image": "/img/tejas.webp" }]
+        }
+      ]
+    },
+    {
+      "day": "Monday, 8 June",
+      "time": "17:15-17:20",
+      "session": "Ending of the day"
+    },
+    {
+      "day": "Monday, 8 June",
+      "time": "17:30-20:30",
+      "session": "Mobile Mates meetup"
+    },
+    {
+      "day": "Tuesday, 9 June",
+      "time": "08:00-08:50",
+      "session": "Conference registration"
+    },
+    {
+      "day": "Tuesday, 9 June",
+      "time": "08:50-09:00",
+      "session": "Welcome"
+    },
+    {
+      "day": "Tuesday, 9 June",
+      "time": "09:00-10:30",
+      "session": "Simplicity",
+      "talks": [
+        {
+          "title": "Modern UI Patterns",
+          "speakers": [{ "name": "Una Kravets", "image": "/img/una.webp" }]
+        },
+        {
+          "title": "A Canon for the Vanilla Web - How pairing modern platform features with a small set of conventions lets us build beautiful web UI in half the tokens",
+          "speakers": [{ "name": "Tony Ennis", "image": "/img/tony-ennis.webp" }]
+        }
+      ]
+    },
+    {
+      "day": "Tuesday, 9 June",
+      "time": "10:30-11:00",
+      "session": "Break"
+    },
+    {
+      "day": "Tuesday, 9 June",
+      "time": "11:00-12:30",
+      "session": "Architecture",
+      "talks": [
+        {
+          "title": "Bringing a bit of architecture in your frontend application",
+          "speakers": [{ "name": "Matthew Mamonov", "image": "/img/matthew-m.webp" }]
+        },
+        {
+          "title": "AI-first frontend architecture",
+          "speakers": [{ "name": "Rashmi Suralkar", "image": "/img/rashmi.webp" }]
+        }
+      ]
+    },
+    {
+      "day": "Tuesday, 9 June",
+      "time": "12:30-13:30",
+      "session": "Lunch"
+    },
+    {
+      "day": "Tuesday, 9 June",
+      "time": "13:30-15:00",
+      "session": "Agentic development",
+      "talks": [
+        {
+          "title": "The AI Velocity Trap: Shipping Faster Without Breaking More",
+          "speakers": [{ "name": "Ohans Emmanuel", "image": "/img/ohans.webp" }]
+        },
+        {
+          "title": "Building My Own Coding Agent",
+          "speakers": [{ "name": "Christoffer Niska", "image": "/img/crisu.webp" }]
+        }
+      ]
+    },
+    {
+      "day": "Tuesday, 9 June",
+      "time": "15:00-15:30",
+      "session": "Break"
+    },
+    {
+      "day": "Tuesday, 9 June",
+      "time": "15:30-17:00",
+      "session": "Agentic use cases",
+      "talks": [
+        {
+          "title": "Mysterious talk",
+          "speakers": [
+            { "name": "Alex Booker", "image": "/img/alex-booker.webp" },
+            { "name": "Tony Kovanen", "image": "/img/tony-kovanen.webp" }
+          ]
+        },
+        {
+          "title": "The Headless Web",
+          "speakers": [{ "name": "Rachel-Lee Nabors", "image": "/img/rachel.webp" }]
+        }
+      ]
+    },
+    {
+      "day": "Tuesday, 9 June",
+      "time": "17:00-17:15",
+      "session": "Ending of the day"
+    },
+    {
+      "day": "Tuesday, 9 June",
+      "time": "17:30-21:00",
+      "session": "HelsinkiJS meetup"
+    },
+    {
+      "day": "Wednesday, 10 June",
+      "time": "08:00-09:00",
+      "session": "Workshop registration"
+    },
+    {
+      "day": "Wednesday, 10 June",
+      "time": "17:30-21:00",
+      "session": "Vibe Coding Finland"
+    },
+    {
+      "day": "Thursday, 11 June",
+      "time": "08:00-09:00",
+      "session": "Workshop registration"
+    }
+  ],
+  "sponsors": [
+    { "name": "Ohjelmistofriikit", "image": "/img/ohjelmistofriikit-black.svg", "size": "tech" },
+    { "name": "Nitor", "image": "/img/nitor.svg", "size": "tech" },
+    { "name": "Alma Media", "image": "/img/alma.svg", "size": "brand" }
+  ]
+}

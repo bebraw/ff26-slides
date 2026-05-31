@@ -3,10 +3,13 @@ import { expect, test } from "@playwright/test";
 test("renders the break slide deck", async ({ page }) => {
   await page.goto("/", { waitUntil: "domcontentloaded" });
 
+  await expect(page.getByRole("heading", { level: 1, name: "Conference registration" })).toBeVisible();
+  await expect(page.locator('[data-active-slide="true"]').locator(".next-label")).toHaveCount(0);
+  await page.goto("/?slide=3", { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("heading", { level: 1, name: "Designing futures" })).toBeVisible();
   await expect(page.locator('[data-active-slide="true"]').getByText("Pasi Sillanpää")).toBeVisible();
   await page.keyboard.press("ArrowRight");
-  await expect(page).toHaveURL(/slide=2/);
+  await expect(page).toHaveURL(/slide=4/);
   await expect(page.getByRole("heading", { level: 1, name: "We Don't Have an Idea Problem. We Have a Permission Problem." })).toBeVisible();
 });
 

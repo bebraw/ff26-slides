@@ -1,4 +1,5 @@
-import { breakSlides, sponsors, type BreakSlide, type Speaker, type Sponsor, type Talk } from "../break-slides";
+import type { BreakSlide, Speaker, Sponsor, Talk } from "../break-slide-types";
+import type { SlideData } from "../slide-data";
 import { escapeHtml } from "./shared";
 
 const assetBaseUrl = "https://futurefrontend.com";
@@ -16,8 +17,10 @@ type DeckSlide =
       time: string;
     };
 
-export function renderHomePage(_routes: Array<{ path: string; purpose: string }>): string {
-  const renderedSlides = buildDeckSlides().map(renderDeckSlide).join("");
+export function renderHomePage(_routes: Array<{ path: string; purpose: string }>, slideData: SlideData): string {
+  const renderedSlides = buildDeckSlides(slideData.breakSlides)
+    .map((slide, index) => renderDeckSlide(slideData.sponsors, slide, index))
+    .join("");
 
   return `<!doctype html>
 <html lang="en">
@@ -34,7 +37,7 @@ export function renderHomePage(_routes: Array<{ path: string; purpose: string }>
 </html>`;
 }
 
-function buildDeckSlides(): DeckSlide[] {
+function buildDeckSlides(breakSlides: BreakSlide[]): DeckSlide[] {
   return breakSlides.flatMap((slide) => [
     { kind: "break" as const, slide },
     ...(slide.talks?.map((talkItem) => ({
@@ -47,16 +50,17 @@ function buildDeckSlides(): DeckSlide[] {
   ]);
 }
 
-function renderDeckSlide(deckSlide: DeckSlide, index: number): string {
-  return deckSlide.kind === "break" ? renderBreakSlide(deckSlide.slide, index) : renderTalkSlide(deckSlide, index);
+function renderDeckSlide(sponsors: Sponsor[], deckSlide: DeckSlide, index: number): string {
+  return deckSlide.kind === "break" ? renderBreakSlide(sponsors, deckSlide.slide, index) : renderTalkSlide(sponsors, deckSlide, index);
 }
 
-function renderBreakSlide(slide: BreakSlide, index: number): string {
+function renderBreakSlide(sponsors: Sponsor[], slide: BreakSlide, index: number): string {
   const activeAttribute = index === 0 ? ' data-active-slide="true"' : ' aria-hidden="true"';
   const talks = slide.talks?.map(renderTalk).join("") ?? "";
   const talkCount = slide.talks?.length ?? 0;
   const talkGrid = talks ? `<div class="talk-grid talk-grid-${talkCount}">${talks}</div>` : "";
-  const label = slide.label ?? "Next session";
+  const label = slide.label ?? (talkGrid ? "Next session" : "");
+  const labelMarkup = label ? `<p class="next-label">${escapeHtml(label)}</p>` : "";
 
   return `<section class="break-slide"${activeAttribute} data-break-slide data-slide-number="${index + 1}">
     <header class="slide-header">
@@ -67,7 +71,7 @@ function renderBreakSlide(slide: BreakSlide, index: number): string {
       </div>
     </header>
     <div class="slide-content">
-      <p class="next-label">${escapeHtml(label)}</p>
+      ${labelMarkup}
       <h1>${escapeHtml(slide.session)}</h1>
       ${talkGrid}
     </div>
@@ -77,7 +81,7 @@ function renderBreakSlide(slide: BreakSlide, index: number): string {
   </section>`;
 }
 
-function renderTalkSlide(slide: Extract<DeckSlide, { kind: "talk" }>, index: number): string {
+function renderTalkSlide(sponsors: Sponsor[], slide: Extract<DeckSlide, { kind: "talk" }>, index: number): string {
   const activeAttribute = index === 0 ? ' data-active-slide="true"' : ' aria-hidden="true"';
   const titleClass = getTalkTitleClass(slide.talk.title);
 

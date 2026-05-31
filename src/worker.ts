@@ -1,5 +1,6 @@
 import { createHealthResponse } from "./api/health";
 import { exampleRoutes } from "./app-routes";
+import { emptySlideData, parseSlideData, type SlideData } from "./slide-data";
 import { renderHomePage } from "./views/home";
 import { renderNotFoundPage } from "./views/not-found";
 import { assetResponse, cssResponse, htmlResponse, javascriptResponse } from "./views/shared";
@@ -30,7 +31,7 @@ export async function handleRequest(request: Request): Promise<Response> {
   }
 
   if (url.pathname === "/") {
-    return htmlResponse(renderHomePage(exampleRoutes));
+    return htmlResponse(renderHomePage(exampleRoutes, await loadSlideData()));
   }
 
   if (url.pathname === "/api/health") {
@@ -60,6 +61,39 @@ async function loadClientScript(): Promise<string> {
 
   const script = await import("../.generated/client/slides.client.txt");
   return script.default;
+}
+
+async function loadSlideData(): Promise<SlideData> {
+  const fallback = await loadFallbackSlideData();
+
+  // Stryker disable next-line ConditionalExpression,OptionalChaining: Environment probe selects Node fs in tests and bundled JSON in Workers.
+  if (typeof process !== "undefined" && process.release?.name === "node") {
+    const { readFile } = await import("node:fs/promises");
+
+    try {
+      return parseSlideData(await readFile(new URL("../.generated/break-slides.json", import.meta.url), "utf8"), fallback);
+    } catch (error) {
+      if (error instanceof Error && "code" in error && error.code === "ENOENT") {
+        return fallback;
+      }
+
+      throw error;
+    }
+  }
+
+  const slideData = await import("../.generated/break-slides.json");
+  return parseSlideData(slideData.default, fallback);
+}
+
+async function loadFallbackSlideData(): Promise<SlideData> {
+  // Stryker disable next-line ConditionalExpression,OptionalChaining: Environment probe selects Node fs in tests and bundled JSON in Workers.
+  if (typeof process !== "undefined" && process.release?.name === "node") {
+    const { readFile } = await import("node:fs/promises");
+    return parseSlideData(await readFile(new URL("./break-slides.json", import.meta.url), "utf8"), emptySlideData);
+  }
+
+  const slideData = await import("./break-slides.json");
+  return parseSlideData(slideData.default, emptySlideData);
 }
 
 async function loadLogo(): Promise<string> {

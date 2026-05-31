@@ -4,3 +4,9 @@ SESSION_SECRET=change-this-to-a-long-random-secret
 # Optional: keep a separate key for encrypted third-party credentials or
 # other sensitive values stored by the app.
 # APP_ENCRYPTION_SECRET=change-this-to-a-different-long-random-secret
+
+# Optional: used only by `npm run sync:slides`, never by the public Worker
+# runtime. The GraphQL token is sent as a TOKEN header.
+FF26_GRAPHQL_URL=https://example.com/graphql
+FF26_GRAPHQL_TOKEN=change-this-to-the-api-token
+FF26_CONFERENCE_ID=change-this-to-the-conference-id

@@ -59,6 +59,8 @@ No accepted-only ADRs are currently pending implementation.
 | [ADR-024](./implemented/ADR-024-disallow-inline-client-code-in-worker-views.md)       | Implemented | Reject untyped inline browser code in Worker-rendered HTML through the fast quality gate.      |
 | [ADR-025](./implemented/ADR-025-skip-agent-ci-for-docs-only-changes.md)               | Implemented | Allow documentation-only changes to skip local Agent CI when executable behavior is unchanged. |
 | [ADR-026](./implemented/ADR-026-run-affected-guardrails-when-possible.md)             | Implemented | Run affected-file guardrails during iteration and pre-push when checks can be scoped safely.   |
+| [ADR-027](./implemented/ADR-027-allow-external-client-modules.md)                     | Implemented | Allow typed external browser modules from Worker-rendered HTML while keeping inline code out.  |
+| [ADR-028](./implemented/ADR-028-sync-break-slides-from-graphql.md)                    | Implemented | Refresh break slide schedule data from GraphQL at sync time instead of Worker request time.    |
 
 ## Creating A New ADR
 

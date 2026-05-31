@@ -13,4 +13,9 @@ declare module "../.generated/client/*.txt" {
   export default value;
 }
 
+declare module "../.generated/*.json" {
+  const value: string;
+  export default value;
+}
+
 declare module "*.ts?test=*" {}

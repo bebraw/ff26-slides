@@ -15,12 +15,43 @@ The root route shows the break slides. Session overview slides present the upcom
 
 ## Slide Content
 
-- Session data is curated in `src/views/home.ts` from the public Future Frontend schedule at `https://futurefrontend.com/schedule/`.
-- Speaker and sponsor images are loaded from `https://futurefrontend.com/img/...`.
+- Session fallback data lives in `src/break-slides.json`; `npm run sync:slides` refreshes the generated `.generated/break-slides.json` artifact from the Future Frontend GraphQL API.
+- Speaker images are loaded from the URLs stored in the synced schedule data.
+- Sponsor images are loaded from `https://futurefrontend.com/img/...`.
 - The provided Future Frontend logo is served from `src/assets/ff26-logo.svg`.
 - Finlandica Headline Regular is served from `src/assets/FinlandicaHeadline-Regular.ttf`.
 
-When the conference schedule changes, update `src/views/home.ts` and keep the break slide spec in `specs/break-slides/spec.md` in sync.
+To sync schedule changes locally, copy `.dev.vars.example` to `.dev.vars`, set `FF26_GRAPHQL_URL`, `FF26_GRAPHQL_TOKEN`, and `FF26_CONFERENCE_ID`, then run `npm run sync:slides`. The token is used only by the sync script and must not be committed.
+
+The sync script writes `.generated/break-slides.json`, which is ignored by git. Inspect the generated JSON after every sync because the speaker order, session grouping, and schedule-only intervals are production-facing slide content.
+
+## Deployment
+
+### Local Manual Deploy
+
+1. Run `nvm use`.
+2. Run `npm install` if dependencies are not installed.
+3. Put the GraphQL values in untracked `.dev.vars`:
+   - `FF26_GRAPHQL_URL`
+   - `FF26_GRAPHQL_TOKEN`
+   - `FF26_CONFERENCE_ID`
+4. Run `npm run sync:slides`.
+5. Review `.generated/break-slides.json`.
+6. Run `npm run quality:gate`.
+7. Run `npm run ci:local`.
+8. Deploy with `npm run deploy`.
+
+### Cloudflare Webhook Sync
+
+Use a dedicated Cloudflare build/deploy hook for schedule refreshes. Configure the hook target with the same three GraphQL environment variables as secrets, then use this command before deployment:
+
+```sh
+npm run sync:slides && npm run build
+```
+
+Keep normal Worker runtime requests token-free. The public Worker should serve the already-synced slide data and generated assets; it should not call the GraphQL API when attendees load the deck.
+
+If the Cloudflare job performs deployment directly, run `npm run deploy` after the sync and build steps. If the hook is a build-only trigger managed by Cloudflare, make sure its configured build command includes `npm run sync:slides && npm run build`.
 
 ## Verification
 

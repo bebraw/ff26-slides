@@ -10,7 +10,7 @@
   "rules": [
     {
       "type": "Text",
-      "globs": ["**/*.css", ".generated/client/*.txt", "**/*.svg"],
+      "globs": ["**/*.css", ".generated/*.json", "src/*.json", ".generated/client/*.txt", "**/*.svg"],
       "fallthrough": true,
     },
     {
