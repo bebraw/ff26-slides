@@ -13,6 +13,8 @@
     }
   },
   "scripts": {
+    "build": "npm run build:css && npm run build:client",
+    "build:client": "tsc src/client/slides.ts --ignoreConfig --outDir .generated/client --target ES2022 --module ES2022 --moduleResolution Bundler --strict --lib ES2022,DOM --skipLibCheck --noEmit false --declaration false --sourceMap false && cp .generated/client/slides.js .generated/client/slides.client.txt",
     "build:css": "mkdir -p ./.generated && tailwindcss -i ./src/tailwind-input.css -o ./.generated/styles.css --minify",
     "ci:local": "agent-ci run --quiet --jobs 1 --workflow .github/workflows/ci.yml",
     "ci:local:retry": "agent-ci retry",

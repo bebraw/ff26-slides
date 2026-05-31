@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Finlandica Headline";
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url("/fonts/FinlandicaHeadline-Regular.ttf") format("truetype");
+}
+
 @theme {
   --color-app-canvas: #f3eee6;
   --color-app-surface: rgb(255 252 247 / 0.84);
@@ -24,9 +32,9 @@
   }
 
   body {
-    font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    font-family: "Finlandica Headline", system-ui, sans-serif;
     text-rendering: optimizeLegibility;
-    background: linear-gradient(180deg, #f8f4ee 0%, var(--color-app-canvas) 100%);
+    background: #000;
   }
 
   ::selection {
@@ -39,5 +47,199 @@
   ::backdrop,
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@layer components {
+  .slide-deck {
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+  }
+
+  .break-slide {
+    display: none;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    aspect-ratio: 16 / 9;
+    grid-template-rows: auto 1fr auto;
+    gap: clamp(1rem, 2.4vh, 2rem);
+    padding: clamp(1.5rem, 4vw, 5rem);
+    overflow: hidden;
+  }
+
+  .break-slide[data-active-slide="true"] {
+    display: grid;
+  }
+
+  .slide-header,
+  .sponsor-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(1rem, 2vw, 2rem);
+  }
+
+  .conference-logo {
+    width: clamp(9rem, 17vw, 18rem);
+    max-height: 5rem;
+    object-fit: contain;
+    filter: invert(1) grayscale(1) contrast(2);
+  }
+
+  .slide-kicker {
+    display: flex;
+    gap: clamp(0.8rem, 2vw, 2rem);
+    color: rgb(255 255 255 / 0.68);
+    font-size: clamp(1rem, 1.7vw, 1.65rem);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .slide-content {
+    align-self: center;
+    display: grid;
+    gap: clamp(1rem, 3vh, 2rem);
+    width: 100%;
+  }
+
+  .next-label {
+    color: rgb(255 255 255 / 0.62);
+    font-size: clamp(1.05rem, 1.8vw, 1.8rem);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .slide-content h1 {
+    max-width: 12ch;
+    font-size: clamp(4.6rem, 10vw, 12rem);
+    font-weight: 850;
+    line-height: 0.82;
+  }
+
+  .talk-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.9rem, 2vw, 2rem);
+    width: 100%;
+  }
+
+  .talk-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .talk-card {
+    display: grid;
+    grid-template-rows: minmax(4.5rem, auto) auto;
+    gap: clamp(0.9rem, 1.8vh, 1.4rem);
+    border-top: 1px solid rgb(255 255 255 / 0.48);
+    padding-top: clamp(0.8rem, 1.8vh, 1.4rem);
+  }
+
+  .talk-card h2 {
+    font-size: clamp(1.5rem, 2.8vw, 3rem);
+    font-weight: 620;
+    line-height: 1;
+  }
+
+  .talk-grid-3 .talk-card h2 {
+    font-size: clamp(1.35rem, 2.25vw, 2.5rem);
+  }
+
+  .speaker-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(0.8rem, 1.4vw, 1.3rem);
+  }
+
+  .speaker {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-width: 0;
+  }
+
+  .speaker img {
+    width: clamp(3.2rem, 5.4vw, 5.7rem);
+    height: clamp(3.2rem, 5.4vw, 5.7rem);
+    border-radius: 999px;
+    object-fit: cover;
+    filter: grayscale(1);
+  }
+
+  .talk-grid-3 .speaker img {
+    width: clamp(3rem, 4.7vw, 5rem);
+    height: clamp(3rem, 4.7vw, 5rem);
+  }
+
+  .speaker figcaption {
+    max-width: 15rem;
+    color: rgb(255 255 255 / 0.78);
+    font-size: clamp(1rem, 1.6vw, 1.55rem);
+    line-height: 0.98;
+  }
+
+  .sponsor-strip {
+    border-top: 1px solid rgb(255 255 255 / 0.55);
+    padding-top: clamp(0.8rem, 1.8vh, 1.4rem);
+  }
+
+  .sponsor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    padding: clamp(0.55rem, 1.2vw, 1.1rem);
+  }
+
+  .sponsor img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: grayscale(1);
+  }
+
+  .sponsor-tech {
+    width: clamp(11rem, 16vw, 19rem);
+    height: clamp(3.8rem, 5.4vw, 6.2rem);
+  }
+
+  .sponsor-brand {
+    width: clamp(7rem, 10vw, 11rem);
+    height: clamp(3.2rem, 4.6vw, 5rem);
+    margin-left: auto;
+  }
+
+  @media (max-width: 760px) {
+    .break-slide {
+      padding: 1rem;
+      gap: 1rem;
+    }
+
+    .slide-header,
+    .slide-kicker,
+    .sponsor-strip {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .slide-content h1 {
+      font-size: clamp(3.2rem, 18vw, 6rem);
+    }
+
+    .talk-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .sponsor-strip {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .sponsor-brand {
+      margin-left: 0;
+    }
   }
 }

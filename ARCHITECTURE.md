@@ -14,7 +14,7 @@ Use this file for global constraints. Use feature specs under `specs/` for domai
 - Create or update the relevant feature spec in `specs/` in the same change set whenever feature behavior, contracts, workflows, or regression guardrails change.
 - Keep the quality gate green before considering a change ready.
 - Keep workflow writes explicit. New generated output, local state, cache, archive, or tool-artifact paths should be documented in the same change that introduces them.
-- Do not place executable browser code inline in Worker-rendered HTML. Client behavior should live in typed TypeScript modules before it is served to browsers.
+- Do not place executable browser code inline in Worker-rendered HTML. Client behavior should live in typed TypeScript modules built into explicit browser assets before it is served to browsers.
 
 ## Tooling Baseline
 
@@ -24,7 +24,7 @@ Use this file for global constraints. Use feature specs under `specs/` for domai
 - The repo-managed `pre-push` Git hook should run affected-file guardrails before code is pushed.
 - Formatting, type checking, unit tests, and end-to-end tests are part of the baseline quality gate.
 - Affected-file guardrails should scope checks to changed files when the underlying tool supports it and fall back to project-level checks only when needed.
-- The fast quality gate should fail when Worker/view runtime files contain inline `<script>` tags, inline event-handler attributes, or `javascript:` URLs.
+- The fast quality gate should fail when Worker/view runtime files contain inline `<script>` tags without `src`, inline event-handler attributes, or `javascript:` URLs.
 - Unit coverage for `src/` code should stay high enough that the coverage gate remains green.
 - Local CI should validate the same baseline checks before non-documentation changes are proposed or merged.
 - Targeted commands are useful while iterating, but `npm run quality:gate` and `npm run ci:local` remain the readiness baseline before proposing or landing non-documentation changes.

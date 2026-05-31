@@ -2,7 +2,7 @@ import { createHealthResponse } from "./api/health";
 import { exampleRoutes } from "./app-routes";
 import { renderHomePage } from "./views/home";
 import { renderNotFoundPage } from "./views/not-found";
-import { cssResponse, htmlResponse } from "./views/shared";
+import { assetResponse, cssResponse, htmlResponse, javascriptResponse } from "./views/shared";
 
 export default {
   async fetch(request: Request): Promise<Response> {
@@ -15,6 +15,18 @@ export async function handleRequest(request: Request): Promise<Response> {
 
   if (url.pathname === "/styles.css") {
     return cssResponse(await loadStylesheet());
+  }
+
+  if (url.pathname === "/slides.js") {
+    return javascriptResponse(await loadClientScript());
+  }
+
+  if (url.pathname === "/assets/ff26-logo.svg") {
+    return assetResponse(await loadLogo(), "image/svg+xml; charset=utf-8");
+  }
+
+  if (url.pathname === "/fonts/FinlandicaHeadline-Regular.ttf") {
+    return assetResponse(await loadFont(), "font/ttf");
   }
 
   if (url.pathname === "/") {
@@ -37,4 +49,38 @@ async function loadStylesheet(): Promise<string> {
 
   const styles = await import("../.generated/styles.css");
   return styles.default;
+}
+
+async function loadClientScript(): Promise<string> {
+  // Stryker disable next-line ConditionalExpression,OptionalChaining: Environment probe selects Node fs in tests and bundled JS in Workers.
+  if (typeof process !== "undefined" && process.release?.name === "node") {
+    const { readFile } = await import("node:fs/promises");
+    return await readFile(new URL("../.generated/client/slides.client.txt", import.meta.url), "utf8");
+  }
+
+  const script = await import("../.generated/client/slides.client.txt");
+  return script.default;
+}
+
+async function loadLogo(): Promise<string> {
+  // Stryker disable next-line ConditionalExpression,OptionalChaining: Environment probe selects Node fs in tests and bundled SVG in Workers.
+  if (typeof process !== "undefined" && process.release?.name === "node") {
+    const { readFile } = await import("node:fs/promises");
+    return await readFile(new URL("./assets/ff26-logo.svg", import.meta.url), "utf8");
+  }
+
+  const logo = await import("./assets/ff26-logo.svg");
+  return logo.default;
+}
+
+async function loadFont(): Promise<ArrayBuffer> {
+  // Stryker disable next-line ConditionalExpression,OptionalChaining: Environment probe selects Node fs in tests and bundled font in Workers.
+  if (typeof process !== "undefined" && process.release?.name === "node") {
+    const { readFile } = await import("node:fs/promises");
+    const font = await readFile(new URL("./assets/FinlandicaHeadline-Regular.ttf", import.meta.url));
+    return font.buffer.slice(font.byteOffset, font.byteOffset + font.byteLength);
+  }
+
+  const font = await import("./assets/FinlandicaHeadline-Regular.ttf");
+  return font.default;
 }
