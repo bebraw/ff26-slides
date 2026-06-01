@@ -20,6 +20,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - **Talk slides:** `src/views/home.ts` derives one standalone slide per talk from the same session data, directly after the containing session overview slide.
 - **Navigation:** `src/client/slides.ts` handles left/right arrow navigation and stores the current slide in the `slide` query parameter.
 - **Print layout:** `src/tailwind-input.css` includes print media rules for A4 portrait schedule and speaker check-in sheets.
+- **Print color:** Schedule and speaker check-in PDF exports preserve their screen background colors through print color adjustment rules.
 - **Client build:** `npm run build:client` compiles the typed client module to `.generated/client/slides.js`, copies the served text asset to `.generated/client/slides.client.txt`, and `npm run build` runs both CSS and client builds.
 - **Assets:** The deck serves the provided Future Frontend logo at `/assets/ff26-logo.svg` and Finlandica Headline at `/fonts/FinlandicaHeadline-Regular.ttf`.
 - **Conference image proxy:** `GET /img/*` fetches matching `futurefrontend.com/img/*` speaker and sponsor images server-side so rendered pages do not hotlink browser image requests to the main conference site.
@@ -47,6 +48,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - [ ] Printing the schedule route produces one A4 portrait sheet per day.
 - [ ] The speaker check-in route renders one talk-day check-in sheet at a time on screen.
 - [ ] Printing the speaker check-in route produces one A4 portrait sheet per talk day.
+- [ ] PDF exports of print sheets preserve the intended background colors.
 - [ ] `npm run sync:slides` can refresh `.generated/break-slides.json` from the GraphQL schedule without adding runtime API calls.
 - [ ] Talk-session slides show the upcoming session, related talks, speaker names, and speaker pictures.
 - [ ] Each individual talk has a standalone slide showing the session, talk title, speaker names, and speaker pictures.
@@ -67,6 +69,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - `GET /schedule` must keep rendering daily schedule sheets from the same slide data.
 - `GET /schedule` must not include stream divider slides as schedule rows.
 - `GET /speaker-checkin` must keep rendering speaker check-in sheets from the same slide data.
+- Print media styles must keep schedule and speaker check-in background colors enabled for PDF export.
 - `GET /slides.js` must return the built typed navigation module.
 - `GET /img/*` must return conference speaker and sponsor images from the main conference site without exposing an open proxy.
 - `GET /assets/ff26-logo.svg` must return the conference logo.

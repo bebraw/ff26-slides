@@ -45,8 +45,10 @@ If local CI warns with `No such remote 'origin'`, add `GITHUB_REPO=owner/repo` t
 - Install the Playwright browser with `npm run playwright:install`.
 - Run end-to-end tests with `npm run e2e`.
 - Run unit and integration tests with `npm test`.
+- Run tests related to affected runtime or unit test files with `npm run test:affected`.
 - Run the unit coverage gate with `npm run test:coverage`.
-- Run mutation tests with `npm run mutation`.
+- Run full mutation tests with `npm run mutation`.
+- Run incremental mutation tests with `npm run mutation:incremental`.
 - Run TypeScript checks with `npm run typecheck`.
 - Run Lighthouse with `LIGHTHOUSE_URL=http://127.0.0.1:8787 LIGHTHOUSE_SERVER_COMMAND="npm run dev" npm run lighthouse`.
 - Format the repo with `npm run format`.
@@ -57,7 +59,7 @@ Use targeted checks while iterating, then run the full readiness path before pro
 
 - Docs-only changes: `npm run format:check`
 - TypeScript or typed tooling changes: `npm run typecheck`
-- Runtime `src/` changes: `npm run typecheck` and `npm run test:coverage`
+- Runtime `src/` changes while iterating: `npm run typecheck` and `npm run test:affected`
 - Browser behavior or UI changes: `npm run quality:gate`
 - Baseline readiness: `npm run quality:gate` and `npm run ci:local`
 
@@ -71,9 +73,9 @@ The Lighthouse setup is also generic, but the Worker stub gives it a concrete lo
 
 The Vitest setup is generic as well. `vitest.config.ts` targets colocated `src/**/*.test.ts` files while excluding `src/**/*.e2e.ts`. The default `npm test` command uses `--passWithNoTests` so the template remains usable before a project adds its first test file.
 
-The coverage gate is stricter than the basic test run. `npm run test:coverage` measures runtime `src/**` code with the V8 provider, writes reports to `reports/coverage/`, and enforces high thresholds once a project actually has `src/` code. Colocated unit tests, end-to-end tests, and test-support files do not count as source files for the gate's skip-or-fail logic.
+The coverage gate is stricter than the basic test run. `npm run test:coverage` measures runtime `src/**` code with the V8 provider, writes reports to `reports/coverage/`, and enforces high thresholds once a project actually has `src/` code. Colocated unit tests, end-to-end tests, and test-support files do not count as source files for the gate's skip-or-fail logic. `npm run test:affected` runs Vitest related tests for affected runtime files and directly runs affected unit test files. It falls back to `npm run test:coverage` when affected files include test environment inputs or when affected runtime files have no related tests.
 
-Mutation testing uses Stryker with Vitest and the TypeScript checker. `npm run mutation` mutates runtime `src/**/*.ts` files while excluding declarations, unit tests, end-to-end tests, and `src/test-support.ts`. It writes mutation reports under `reports/mutation/` and uses Stryker's temporary `.stryker-tmp/` sandbox, which must stay untracked.
+Mutation testing uses Stryker with Vitest and the TypeScript checker. `npm run mutation` performs a full mutation run against runtime `src/**/*.ts` files while excluding declarations, unit tests, end-to-end tests, and `src/test-support.ts`. `npm run mutation:incremental` enables Stryker incremental mode so repeated local quality-gate runs can reuse previous mutant results while still producing a complete mutation report. The Vitest runner uses Stryker's per-test coverage analysis and related-test narrowing, so each mutant runs against the tests Stryker can associate with the mutated file instead of blindly rerunning the whole suite. Stryker worker concurrency is set to `50%` so mutation testing can use parallel workers without assuming a fixed core count for every clone of the template. Mutation reports and Stryker incremental data are written under `reports/`, and Stryker's temporary `.stryker-tmp/` sandbox must stay untracked.
 
 The TypeScript setup is generic too. `tsconfig.json` covers repo-level `.ts` files and `src/**/*.ts`, and `npm run typecheck` runs `tsc --noEmit`.
 
@@ -102,4 +104,4 @@ Use this expectation for routine changes:
 - `npm run ci:local` should also pass before proposing or landing the change.
 - The repo-managed `pre-push` hook runs `npm run quality:gate:fast` automatically after `npm install`, so pushes stop locally when the fast gate is already red.
 
-The quality gate currently runs the fast gate first, then the Playwright browser tests, then mutation tests. The local and remote CI workflow runs separate fast, browser, and mutation jobs, with repository-shape validation included in the fast job. Local Agent CI runs should go through `npm run ci:local`, which uses one local job slot to avoid warmed dependency races on macOS-hosted Docker. Local browser installation should also go through the pinned `npm run playwright:install` script.
+The quality gate currently runs the fast gate first, then the Playwright browser tests, then incremental mutation tests for faster repeated local runs. GitHub Actions runs separate fast, browser, and full mutation jobs, with repository-shape validation included in the fast job. Local Agent CI runs should go through `npm run ci:local`, which uses one local job slot to avoid warmed dependency races on macOS-hosted Docker. Local browser installation should also go through the pinned `npm run playwright:install` script.

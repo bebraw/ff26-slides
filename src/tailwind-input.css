@@ -767,10 +767,17 @@
       margin: 12mm;
     }
 
+    *,
+    ::before,
+    ::after {
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+
     html,
     body,
     .schedule-page {
-      background: #fff;
+      background: #e8e3d7;
     }
 
     .schedule-page {
@@ -789,6 +796,7 @@
       display: grid;
       width: auto;
       min-height: calc(297mm - 24mm);
+      background: #fffdf8;
       box-shadow: none;
       border: 0;
       padding: 0;

@@ -61,6 +61,8 @@ No accepted-only ADRs are currently pending implementation.
 | [ADR-026](./implemented/ADR-026-run-affected-guardrails-when-possible.md)             | Implemented | Run affected-file guardrails during iteration and pre-push when checks can be scoped safely.   |
 | [ADR-027](./implemented/ADR-027-allow-external-client-modules.md)                     | Implemented | Allow typed external browser modules from Worker-rendered HTML while keeping inline code out.  |
 | [ADR-028](./implemented/ADR-028-sync-break-slides-from-graphql.md)                    | Implemented | Refresh break slide schedule data from GraphQL at sync time instead of Worker request time.    |
+| [ADR-029](./implemented/ADR-029-use-incremental-local-mutation-gate.md)               | Implemented | Use Stryker incremental mode for repeated local quality-gate runs.                             |
+| [ADR-030](./implemented/ADR-030-use-relative-stryker-concurrency.md)                  | Implemented | Set Stryker worker concurrency relative to available host parallelism.                         |
 
 ## Creating A New ADR
 
