@@ -116,6 +116,40 @@ describe("renderOpeningSlideDeckPage", () => {
     expect(slackSection).toContain("<p>Join conference Slack at</p>");
     expect(slackSection).toContain("<h1>futurefrontend.com</h1>");
   });
+
+  it("derives the schedule overview from generated day labels", () => {
+    const html = renderOpeningSlideDeckPage({
+      breakSlides: [
+        {
+          day: "Monday 8 June",
+          time: "09:00-10:30",
+          session: "Generated Monday Session",
+          talks: [{ title: "Monday talk", speakers: [{ name: "Monday Speaker", image: "/img/monday.webp" }] }],
+        },
+        {
+          day: "Tuesday 9 June",
+          time: "09:00-10:30",
+          session: "Generated Tuesday Session",
+          talks: [{ title: "Tuesday talk", speakers: [{ name: "Tuesday Speaker", image: "/img/tuesday.webp" }] }],
+        },
+        {
+          day: "Wednesday 10 June",
+          time: "09:00-10:30",
+          session: "Generated Workshop Session",
+          talks: [{ title: "Workshop talk", speakers: [{ name: "Workshop Speaker", image: "/img/workshop.webp" }] }],
+        },
+      ],
+      sponsors: [],
+    } satisfies SlideData);
+
+    const scheduleSection = getSlide(html, "opening-slide-schedule-overview");
+
+    expect(scheduleSection).toContain("Monday 8 June");
+    expect(scheduleSection).toContain("Generated Monday Session");
+    expect(scheduleSection).toContain("Tuesday 9 June");
+    expect(scheduleSection).toContain("Generated Tuesday Session");
+    expect(scheduleSection).not.toContain("Generated Workshop Session");
+  });
 });
 
 function getSection(html: string, marker: string): string {

@@ -251,14 +251,18 @@ function renderMeetup(meetup: { day: string; time: string; title: string }): str
 }
 
 function buildSessionOverview(breakSlides: BreakSlide[]): Array<{ day: string; sessions: Array<{ time: string; title: string }> }> {
-  const conferenceDays = ["Monday, 8 June", "Tuesday, 9 June"];
+  const conferenceDays = Array.from(new Set(breakSlides.filter(hasTalks).map((slide) => slide.day))).slice(0, 2);
 
   return conferenceDays.map((day) => ({
     day,
     sessions: breakSlides
-      .filter((slide) => slide.day === day && slide.talks && slide.talks.length > 0)
+      .filter((slide) => slide.day === day && hasTalks(slide))
       .map((slide) => ({ time: slide.time, title: slide.session })),
   }));
+}
+
+function hasTalks(slide: BreakSlide): boolean {
+  return Boolean(slide.talks && slide.talks.length > 0);
 }
 
 function buildMeetups(breakSlides: BreakSlide[]): Array<{ day: string; time: string; title: string }> {
