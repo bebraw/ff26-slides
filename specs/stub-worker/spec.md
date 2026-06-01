@@ -46,6 +46,7 @@ The project keeps the lightweight Cloudflare Worker shell from the starter while
 
 - **Automated tests:** colocated Vitest files under `src/**/*.test.ts` for module behavior and colocated Playwright files under `src/**/*.e2e.ts` for the browser-visible flow.
 - **Coverage target:** Keep the `src/worker.ts`, `src/api/**`, and `src/views/**` branches, lines, functions, and statements above the repo coverage thresholds.
+- **Layout target:** Break slides must keep header, main content, and sponsor strip inside compact iPad-sized viewports such as 1024 × 600.
 
 ### Scenarios
 

@@ -69,6 +69,47 @@ test("keeps individual talk slides inside the viewport", async ({ page }) => {
   }
 });
 
+test("keeps the slide deck inside a compact iPad viewport", async ({ page }) => {
+  await page.setViewportSize({ width: 1024, height: 600 });
+  await page.goto("/slides", { waitUntil: "domcontentloaded" });
+
+  const slideCount = await page.locator("[data-break-slide]").count();
+
+  for (let slideNumber = 1; slideNumber <= slideCount; slideNumber += 1) {
+    await page.goto(`/slides?slide=${slideNumber}`, { waitUntil: "domcontentloaded" });
+
+    const activeSlide = page.locator('[data-active-slide="true"]');
+    const layout = await activeSlide.evaluate((slide) => {
+      const viewport = { width: window.innerWidth, height: window.innerHeight };
+      const trackedElements = Array.from(
+        slide.querySelectorAll<HTMLElement>("h1,.talk-slide-speakers,.talk-grid,.sponsor-strip,.slide-header"),
+      );
+      const content = slide.querySelector<HTMLElement>(".slide-content,.talk-slide-content")?.getBoundingClientRect();
+      const footer = slide.querySelector<HTMLElement>(".sponsor-strip")?.getBoundingClientRect();
+
+      return {
+        offscreenElements: trackedElements
+          .map((element) => {
+            const box = element.getBoundingClientRect();
+
+            return {
+              className: element.className,
+              top: box.top,
+              right: box.right,
+              bottom: box.bottom,
+              left: box.left,
+            };
+          })
+          .filter((box) => box.top < -0.5 || box.left < -0.5 || box.right > viewport.width + 0.5 || box.bottom > viewport.height + 0.5),
+        footerOverlap: content && footer ? content.bottom > footer.top + 0.5 : false,
+      };
+    });
+
+    expect(layout.offscreenElements, `slide ${slideNumber} should stay inside the viewport`).toEqual([]);
+    expect(layout.footerOverlap, `slide ${slideNumber} content should stay above sponsors`).toBe(false);
+  }
+});
+
 test("serves the health endpoint", async ({ request }) => {
   const response = await request.get("/api/health");
 
