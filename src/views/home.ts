@@ -69,6 +69,7 @@ function renderIndexLink(route: { path: string; purpose: string }): string {
   const titleByPath = new Map([
     ["/", "Index"],
     ["/slides", "Slides"],
+    ["/opening", "Opening"],
     ["/schedule", "Schedule"],
     ["/speaker-checkin", "Speaker check-in"],
   ]);

@@ -377,6 +377,232 @@
     margin-left: auto;
   }
 
+  .opening-slide {
+    grid-template-rows: auto 1fr;
+  }
+
+  .opening-slide-title {
+    grid-template-rows: 1fr;
+  }
+
+  .opening-slide .slide-content {
+    align-self: stretch;
+    align-content: center;
+  }
+
+  .opening-title {
+    place-items: center;
+    text-align: center;
+  }
+
+  .opening-title-logo {
+    width: min(92vw, 92rem);
+    max-height: 86vh;
+    filter: invert(1);
+  }
+
+  .opening-welcome p,
+  .opening-code-of-conduct p,
+  .opening-two-line p {
+    color: rgb(255 255 255 / 0.72);
+    font-size: clamp(1.7rem, 3.4vw, 4rem);
+    line-height: 1;
+  }
+
+  .opening-welcome h1,
+  .opening-code-of-conduct h1,
+  .opening-two-line h1 {
+    max-width: 16ch;
+    text-wrap: balance;
+  }
+
+  .opening-statement {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .opening-statement h1 {
+    max-width: 14ch;
+    text-wrap: balance;
+  }
+
+  .opening-person-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2rem, 7vw, 8rem);
+    align-items: end;
+  }
+
+  .opening-person {
+    display: grid;
+    justify-items: center;
+    gap: clamp(1.1rem, 2.5vh, 2rem);
+  }
+
+  .opening-person img {
+    width: clamp(14rem, 25vw, 28rem);
+    height: clamp(14rem, 25vw, 28rem);
+    border-radius: 999px;
+    object-fit: cover;
+    filter: grayscale(1);
+  }
+
+  .opening-person figcaption {
+    font-size: clamp(2.2rem, 4.8vw, 6rem);
+    line-height: 0.92;
+    text-align: center;
+  }
+
+  .opening-schedule {
+    gap: clamp(1.4rem, 3vh, 2.6rem);
+  }
+
+  .opening-schedule h1,
+  .opening-speakers h1,
+  .opening-sponsors h1,
+  .opening-meetups h1 {
+    max-width: none;
+    font-size: clamp(3rem, 6.5vw, 7rem);
+  }
+
+  .opening-speakers {
+    gap: clamp(1.3rem, 3vh, 2.5rem);
+  }
+
+  .opening-speaker-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: clamp(1rem, 2.1vw, 2rem);
+    align-items: center;
+    justify-items: center;
+  }
+
+  .opening-speaker {
+    display: grid;
+    place-items: center;
+  }
+
+  .opening-speaker img {
+    width: clamp(5.6rem, 9vw, 9rem);
+    height: clamp(5.6rem, 9vw, 9rem);
+    border-radius: 999px;
+    object-fit: cover;
+    filter: grayscale(1);
+  }
+
+  .opening-day-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.6rem, 4vw, 5rem);
+  }
+
+  .opening-day {
+    display: grid;
+    gap: clamp(1rem, 2vh, 1.7rem);
+    border-top: 1px solid rgb(255 255 255 / 0.55);
+    padding-top: clamp(0.9rem, 1.8vh, 1.4rem);
+  }
+
+  .opening-day h2,
+  .opening-sponsor-tier h2 {
+    color: rgb(255 255 255 / 0.68);
+    font-size: clamp(1.4rem, 2.5vw, 2.7rem);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .opening-day ol,
+  .opening-meetups ul {
+    display: grid;
+    gap: clamp(0.9rem, 1.8vh, 1.4rem);
+    list-style: none;
+  }
+
+  .opening-day li,
+  .opening-meetups li {
+    display: grid;
+    grid-template-columns: minmax(9rem, 12rem) minmax(0, 1fr);
+    gap: clamp(0.9rem, 2vw, 1.6rem);
+    align-items: baseline;
+  }
+
+  .opening-day time,
+  .opening-meetups time {
+    color: rgb(255 255 255 / 0.62);
+    font-size: clamp(1.1rem, 1.85vw, 1.9rem);
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .opening-day span,
+  .opening-meetups span {
+    font-size: clamp(1.6rem, 3vw, 3.35rem);
+    font-weight: 760;
+    line-height: 0.96;
+  }
+
+  .opening-sponsors {
+    align-content: center;
+    gap: clamp(1.2rem, 2.6vh, 2rem);
+  }
+
+  .opening-sponsor-tier {
+    display: grid;
+    gap: clamp(0.8rem, 1.8vh, 1.4rem);
+    border-top: 1px solid rgb(255 255 255 / 0.55);
+    padding-top: clamp(0.8rem, 1.6vh, 1.2rem);
+  }
+
+  .opening-sponsor-tier > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(1rem, 2vw, 1.8rem);
+    align-items: center;
+  }
+
+  .opening-sponsor {
+    display: grid;
+    gap: clamp(0.55rem, 1.1vh, 0.8rem);
+    align-items: center;
+  }
+
+  .opening-sponsor img {
+    width: clamp(12rem, 18vw, 22rem);
+    height: clamp(4rem, 7vw, 8rem);
+    background: #fff;
+    object-fit: contain;
+    padding: clamp(0.7rem, 1.4vw, 1.2rem);
+    filter: grayscale(1);
+  }
+
+  .opening-sponsor-brand img {
+    width: clamp(9rem, 13vw, 15rem);
+    height: clamp(3.5rem, 5vw, 6rem);
+  }
+
+  .opening-sponsor figcaption {
+    color: rgb(255 255 255 / 0.72);
+    font-size: clamp(1rem, 1.6vw, 1.45rem);
+    line-height: 1;
+  }
+
+  .opening-meetups {
+    gap: clamp(1.5rem, 3vh, 2.5rem);
+  }
+
+  .opening-meetups li {
+    grid-template-columns: minmax(22rem, 30rem) minmax(0, 1fr);
+    gap: clamp(1.6rem, 3vw, 3rem);
+  }
+
+  .opening-meetups time {
+    font-size: clamp(1.45rem, 2.35vw, 2.65rem);
+  }
+
+  .opening-meetups span {
+    font-size: clamp(2.2rem, 4.6vw, 5.25rem);
+  }
+
   .schedule-page {
     min-height: 100vh;
     background: #e8e3d7;
@@ -679,6 +905,49 @@
 
     .talk-slide-speaker figcaption {
       font-size: clamp(1.55rem, 7vw, 2.8rem);
+    }
+
+    .opening-person-grid,
+    .opening-speaker-grid,
+    .opening-day-grid,
+    .opening-day li,
+    .opening-meetups li {
+      grid-template-columns: 1fr;
+    }
+
+    .opening-speaker-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.7rem;
+    }
+
+    .opening-speaker img {
+      width: clamp(3.5rem, 17vw, 5.25rem);
+      height: clamp(3.5rem, 17vw, 5.25rem);
+    }
+
+    .opening-person-grid {
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .opening-person {
+      grid-template-columns: clamp(4.6rem, 18vw, 6.5rem) minmax(0, 1fr);
+      justify-items: start;
+      align-items: center;
+    }
+
+    .opening-person img {
+      width: clamp(4.6rem, 18vw, 6.5rem);
+      height: clamp(4.6rem, 18vw, 6.5rem);
+    }
+
+    .opening-person figcaption {
+      font-size: clamp(1.55rem, 7vw, 2.8rem);
+      text-align: left;
+    }
+
+    .opening-sponsor-tier > div {
+      gap: 0.7rem;
     }
 
     .sponsor-strip {

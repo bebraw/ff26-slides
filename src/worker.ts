@@ -3,6 +3,7 @@ import { exampleRoutes } from "./app-routes";
 import { emptySlideData, parseSlideData, type SlideData } from "./slide-data";
 import { renderHomePage, renderSlideDeckPage } from "./views/home";
 import { renderNotFoundPage } from "./views/not-found";
+import { renderOpeningSlideDeckPage } from "./views/opening";
 import { renderSchedulePage } from "./views/schedule";
 import { renderSpeakerCheckInPage } from "./views/speaker-checkin";
 import { assetResponse, cssResponse, htmlResponse, javascriptResponse } from "./views/shared";
@@ -28,6 +29,10 @@ export async function handleRequest(request: Request): Promise<Response> {
     return assetResponse(await loadLogo(), "image/svg+xml; charset=utf-8");
   }
 
+  if (url.pathname === "/assets/tuuli-tiilikainen.jpeg") {
+    return assetResponse(await loadTuuliTiilikainenPhoto(), "image/jpeg");
+  }
+
   if (url.pathname.startsWith("/img/")) {
     return await loadConferenceImage(url);
   }
@@ -42,6 +47,10 @@ export async function handleRequest(request: Request): Promise<Response> {
 
   if (url.pathname === "/slides") {
     return htmlResponse(renderSlideDeckPage(await loadSlideData()));
+  }
+
+  if (url.pathname === "/opening") {
+    return htmlResponse(renderOpeningSlideDeckPage(await loadSlideData()));
   }
 
   if (url.pathname === "/schedule") {
@@ -135,6 +144,18 @@ async function loadFont(): Promise<ArrayBuffer> {
 
   const font = await import("./assets/FinlandicaHeadline-Regular.ttf");
   return font.default;
+}
+
+async function loadTuuliTiilikainenPhoto(): Promise<ArrayBuffer> {
+  // Stryker disable next-line ConditionalExpression,OptionalChaining: Environment probe selects Node fs in tests and bundled JPEG in Workers.
+  if (typeof process !== "undefined" && process.release?.name === "node") {
+    const { readFile } = await import("node:fs/promises");
+    const image = await readFile(new URL("./assets/tuuli-tiilikainen.jpeg", import.meta.url));
+    return image.buffer.slice(image.byteOffset, image.byteOffset + image.byteLength);
+  }
+
+  const image = await import("./assets/tuuli-tiilikainen.jpeg");
+  return image.default;
 }
 
 async function loadConferenceImage(url: URL): Promise<Response> {

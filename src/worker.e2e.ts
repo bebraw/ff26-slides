@@ -5,6 +5,7 @@ test("renders the index page", async ({ page }) => {
 
   await expect(page.getByRole("heading", { level: 1, name: "Future Frontend 2026" })).toBeVisible();
   await expect(page.getByRole("link", { name: /Slides Future Frontend 2026 break slide deck/u })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Opening Future Frontend 2026 opening slide deck/u })).toBeVisible();
   await expect(page.getByRole("link", { name: /Schedule Printable daily conference schedules/u })).toBeVisible();
   await expect(page.getByRole("link", { name: /Speaker check-in Printable daily speaker check-in sheets/u })).toBeVisible();
 });
@@ -20,6 +21,62 @@ test("renders the break slide deck", async ({ page }) => {
   await page.keyboard.press("ArrowRight");
   await expect(page).toHaveURL(/slide=5/);
   await expect(page.getByRole("heading", { level: 1, name: "We Don't Have an Idea Problem. We Have a Permission Problem." })).toBeVisible();
+});
+
+test("renders the opening slide deck", async ({ page }) => {
+  await page.goto("/opening", { waitUntil: "domcontentloaded" });
+
+  await expect(page.locator('[data-active-slide="true"] .opening-title-logo')).toBeVisible();
+  await page.keyboard.press("ArrowRight");
+  await expect(page).toHaveURL(/slide=2/);
+  await expect(page.getByRole("heading", { level: 1, name: "Welcome to Future Frontend 2026" })).toBeVisible();
+  await page.goto("/opening?slide=8", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("heading", { level: 1, name: "18 speakers" })).toBeVisible();
+  await expect(page.locator('[data-active-slide="true"] .opening-speaker')).toHaveCount(18);
+  const speakerGridLayout = await page.locator('[data-active-slide="true"] .opening-speaker-grid').evaluate((grid) => {
+    const viewport = { width: window.innerWidth, height: window.innerHeight };
+    const boxes = Array.from(grid.querySelectorAll("img")).map((image) => {
+      const box = image.getBoundingClientRect();
+
+      return {
+        top: box.top,
+        right: box.right,
+        bottom: box.bottom,
+        left: box.left,
+      };
+    });
+
+    return boxes.filter(
+      (box) => box.top < -0.5 || box.left < -0.5 || box.right > viewport.width + 0.5 || box.bottom > viewport.height + 0.5,
+    );
+  });
+  expect(speakerGridLayout).toEqual([]);
+  await page.goto("/opening?slide=14", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("heading", { level: 1, name: "Meetups" })).toBeVisible();
+  await expect(page.getByText("Vibe Coding Finland")).toBeVisible();
+
+  const meetupRows = await page.locator('[data-active-slide="true"] .opening-meetups li').evaluateAll((rows) =>
+    rows.map((row) => {
+      const time = row.querySelector("time");
+      const title = row.querySelector("span");
+
+      if (!time || !title) {
+        throw new Error("Meetup row is missing time or title");
+      }
+
+      const timeBox = time.getBoundingClientRect();
+      const titleBox = title.getBoundingClientRect();
+
+      return {
+        timeRight: timeBox.right,
+        titleLeft: titleBox.left,
+      };
+    }),
+  );
+
+  for (const row of meetupRows) {
+    expect(row.timeRight).toBeLessThanOrEqual(row.titleLeft);
+  }
 });
 
 test("keeps individual talk slides inside the viewport", async ({ page }) => {
@@ -117,7 +174,7 @@ test("serves the health endpoint", async ({ request }) => {
   await expect(response.json()).resolves.toEqual({
     ok: true,
     name: "vibe-template-worker",
-    routes: ["/", "/slides", "/schedule", "/speaker-checkin", "/api/health", "/slides.js"],
+    routes: ["/", "/slides", "/opening", "/schedule", "/speaker-checkin", "/api/health", "/slides.js"],
   });
 });
 

@@ -15,7 +15,7 @@
     },
     {
       "type": "Data",
-      "globs": ["**/*.ttf"],
+      "globs": ["**/*.ttf", "**/*.jpeg"],
       "fallthrough": true,
     },
   ],

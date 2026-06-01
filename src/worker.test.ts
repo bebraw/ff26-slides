@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import worker, { handleRequest } from "./worker";
 import { ensureGeneratedBreakSlides, ensureGeneratedClientScript, ensureGeneratedStylesheet } from "./test-support";
@@ -23,6 +23,7 @@ describe("worker", () => {
     const body = await response.text();
     expect(body).toContain("Future Frontend 2026 Tools");
     expect(body).toContain('href="/slides"');
+    expect(body).toContain('href="/opening"');
     expect(body).toContain('href="/schedule"');
     expect(body).toContain('href="/speaker-checkin"');
     expect(body).not.toContain("data-break-slide");
@@ -44,6 +45,21 @@ describe("worker", () => {
     expect(body).toContain("/slides.js");
   });
 
+  it("renders the opening slide deck", async () => {
+    const response = await handleRequest(new Request("http://example.com/opening"));
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toContain("text/html");
+    expect(response.headers.get("cache-control")).toBe("no-store");
+
+    const body = await response.text();
+    expect(body).toContain("Future Frontend 2026 Opening Slides");
+    expect(body).toContain("Fourth edition");
+    expect(body).toContain("Mobile Mates meetup");
+    expect(body).toContain("qa.futurefrontend.com");
+    expect(body).toContain("/slides.js");
+  });
+
   it("returns a JSON health response", async () => {
     const response = await handleRequest(new Request("http://example.com/api/health"));
 
@@ -52,7 +68,7 @@ describe("worker", () => {
     await expect(response.json()).resolves.toEqual({
       ok: true,
       name: "vibe-template-worker",
-      routes: ["/", "/slides", "/schedule", "/speaker-checkin", "/api/health", "/slides.js"],
+      routes: ["/", "/slides", "/opening", "/schedule", "/speaker-checkin", "/api/health", "/slides.js"],
     });
   });
 
@@ -155,6 +171,7 @@ describe("worker", () => {
   it("serves slide assets", async () => {
     const logoResponse = await handleRequest(new Request("http://example.com/assets/ff26-logo.svg"));
     const fontResponse = await handleRequest(new Request("http://example.com/fonts/FinlandicaHeadline-Regular.ttf"));
+    const tuuliResponse = await handleRequest(new Request("http://example.com/assets/tuuli-tiilikainen.jpeg"));
 
     expect(logoResponse.status).toBe(200);
     expect(logoResponse.headers.get("content-type")).toContain("image/svg+xml");
@@ -163,6 +180,12 @@ describe("worker", () => {
     expect(fontResponse.status).toBe(200);
     expect(fontResponse.headers.get("content-type")).toContain("font/ttf");
     expect((await fontResponse.arrayBuffer()).byteLength).toBeGreaterThan(100_000);
+
+    expect(tuuliResponse.status).toBe(200);
+    expect(tuuliResponse.headers.get("content-type")).toContain("image/jpeg");
+    const tuuliBytes = new Uint8Array(await tuuliResponse.arrayBuffer());
+    expect(tuuliBytes.byteLength).toBe(statSync("src/assets/tuuli-tiilikainen.jpeg").size);
+    expect(Array.from(tuuliBytes.slice(0, 3))).toEqual([0xff, 0xd8, 0xff]);
   });
 
   it("serves conference images through the Worker", async () => {
