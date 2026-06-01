@@ -15,6 +15,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - **Slide source:** `.generated/break-slides.json` contains the generated 2026 conference session data consumed by the Worker when present.
 - **Fallback data:** `src/break-slides.json` contains committed fallback slide data for clean local builds and tests.
 - **Schedule sync:** `npm run sync:slides` refreshes `.generated/break-slides.json` from the Future Frontend GraphQL API using `FF26_GRAPHQL_URL`, `FF26_GRAPHQL_TOKEN`, and `FF26_CONFERENCE_ID`.
+- **Stream dividers:** The slide deck includes `divider` break-slide variants for the first two conference days: `FF26 – Day 1 (8.6.26)` and `FF26 - Day 2 (9.6.26)`. These render only in `/slides`, not in printable schedule or speaker check-in sheets.
 - **Sync environment:** GraphQL values are build-time sync inputs. They stay in `.dev.vars`, shell/CI environment variables, or Cloudflare build variables and secrets, not Worker runtime configuration.
 - **Talk slides:** `src/views/home.ts` derives one standalone slide per talk from the same session data, directly after the containing session overview slide.
 - **Navigation:** `src/client/slides.ts` handles left/right arrow navigation and stores the current slide in the `slide` query parameter.
@@ -50,6 +51,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - [ ] Talk-session slides show the upcoming session, related talks, speaker names, and speaker pictures.
 - [ ] Each individual talk has a standalone slide showing the session, talk title, speaker names, and speaker pictures.
 - [ ] Schedule-only slides such as registration, welcome, breaks, lunch, and ending of the day render without empty talk cards.
+- [ ] Stream divider slides for Day 1 and Day 2 render in the slide deck without appearing in print tools.
 - [ ] The footer shows tech and brand sponsor logos on one horizontal line, with tech sponsors larger.
 - [ ] Arrow keys can move between slides.
 - [ ] The active slide is represented as a one-based `slide` query parameter.
@@ -61,7 +63,9 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - `GET /` must keep linking to `/slides`, `/schedule`, and `/speaker-checkin`.
 - `GET /slides` must keep rendering the deck title and conference sessions.
 - `GET /slides` must keep rendering standalone slides for individual talks from talk-session data.
+- `GET /slides` must keep rendering the Day 1 and Day 2 stream divider slides.
 - `GET /schedule` must keep rendering daily schedule sheets from the same slide data.
+- `GET /schedule` must not include stream divider slides as schedule rows.
 - `GET /speaker-checkin` must keep rendering speaker check-in sheets from the same slide data.
 - `GET /slides.js` must return the built typed navigation module.
 - `GET /img/*` must return conference speaker and sponsor images from the main conference site without exposing an open proxy.
@@ -135,6 +139,12 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - Given: the `/slides` deck is open on a talk-session overview
 - When: the organizer advances to the next slide
 - Then: the individual talk slide shows the talk title, session name, speaker names, and speaker images
+
+**Scenario: Organizer shows a stream day divider**
+
+- Given: the `/slides` deck is open before a conference day starts
+- When: the organizer navigates to a day divider slide
+- Then: the deck shows the matching `FF26` day title for YouTube stream graphics
 
 **Scenario: Browser opens a persisted slide**
 

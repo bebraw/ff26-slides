@@ -12,13 +12,13 @@ test("renders the index page", async ({ page }) => {
 test("renders the break slide deck", async ({ page }) => {
   await page.goto("/slides", { waitUntil: "domcontentloaded" });
 
-  await expect(page.getByRole("heading", { level: 1, name: "Conference registration" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "FF26 – Day 1 (8.6.26)" })).toBeVisible();
   await expect(page.locator('[data-active-slide="true"]').locator(".next-label")).toHaveCount(0);
-  await page.goto("/slides?slide=3", { waitUntil: "domcontentloaded" });
+  await page.goto("/slides?slide=4", { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("heading", { level: 1, name: "Designing futures" })).toBeVisible();
   await expect(page.locator('[data-active-slide="true"]').getByText("Pasi Sillanpää")).toBeVisible();
   await page.keyboard.press("ArrowRight");
-  await expect(page).toHaveURL(/slide=4/);
+  await expect(page).toHaveURL(/slide=5/);
   await expect(page.getByRole("heading", { level: 1, name: "We Don't Have an Idea Problem. We Have a Permission Problem." })).toBeVisible();
 });
 

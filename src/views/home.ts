@@ -98,6 +98,10 @@ function renderDeckSlide(sponsors: Sponsor[], deckSlide: DeckSlide, index: numbe
 }
 
 function renderBreakSlide(sponsors: Sponsor[], slide: BreakSlide, index: number): string {
+  if (slide.variant === "divider") {
+    return renderDividerSlide(sponsors, slide, index);
+  }
+
   const activeAttribute = index === 0 ? ' data-active-slide="true"' : ' aria-hidden="true"';
   const talks = slide.talks?.map(renderTalk).join("") ?? "";
   const talkCount = slide.talks?.length ?? 0;
@@ -117,6 +121,22 @@ function renderBreakSlide(sponsors: Sponsor[], slide: BreakSlide, index: number)
       ${labelMarkup}
       <h1>${escapeHtml(slide.session)}</h1>
       ${talkGrid}
+    </div>
+    <footer class="sponsor-strip" aria-label="Sponsors">
+      ${sponsors.map(renderSponsor).join("")}
+    </footer>
+  </section>`;
+}
+
+function renderDividerSlide(sponsors: Sponsor[], slide: BreakSlide, index: number): string {
+  const activeAttribute = index === 0 ? ' data-active-slide="true"' : ' aria-hidden="true"';
+
+  return `<section class="break-slide divider-slide"${activeAttribute} data-break-slide data-slide-number="${index + 1}">
+    <header class="slide-header">
+      <img class="conference-logo" src="/assets/ff26-logo.svg" alt="Future Frontend 2026">
+    </header>
+    <div class="slide-content">
+      <h1>${escapeHtml(slide.session)}</h1>
     </div>
     <footer class="sponsor-strip" aria-label="Sponsors">
       ${sponsors.map(renderSponsor).join("")}

@@ -148,12 +148,26 @@ async function fetchSchedule(apiUrl, apiToken, conferenceId) {
 }
 
 function normalizeBreakSlides(schedules) {
-  return schedules.flatMap((schedule) => {
+  return schedules.flatMap((schedule, index) => {
     const intervals = ensureArray(schedule.intervals).toSorted(compareIntervals);
     const day = formatDay(schedule.day);
+    const slides = intervals.map((interval) => normalizeInterval(day, interval)).filter((slide) => slide.session);
 
-    return intervals.map((interval) => normalizeInterval(day, interval)).filter((slide) => slide.session);
+    return shouldAddDayDivider(schedule.day, index) ? [createDayDivider(schedule.day, day, index), ...slides] : slides;
   });
+}
+
+function shouldAddDayDivider(day, index) {
+  return index < 2 && ["2026-06-08", "2026-06-09"].includes(cleanText(day));
+}
+
+function createDayDivider(value, day, index) {
+  return {
+    day,
+    time: "",
+    session: `FF26 ${index === 0 ? "–" : "-"} Day ${index + 1} (${formatShortDate(value)})`,
+    variant: "divider",
+  };
 }
 
 function normalizeInterval(day, interval) {
@@ -238,6 +252,16 @@ function formatTimeRange(begin, end) {
   const stop = formatTime(end);
 
   return stop ? `${start}-${stop}` : start;
+}
+
+function formatShortDate(value) {
+  const date = new Date(`${value}T00:00:00Z`);
+
+  if (Number.isNaN(date.valueOf())) {
+    return cleanText(value);
+  }
+
+  return `${date.getUTCDate()}.${date.getUTCMonth() + 1}.${String(date.getUTCFullYear()).slice(-2)}`;
 }
 
 function formatTime(value) {

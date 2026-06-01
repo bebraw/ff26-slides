@@ -12,6 +12,8 @@ describe("renderSpeakerCheckInPage", () => {
     expect(html).toContain("Monday, 8 June");
     expect(html).toContain("Tuesday, 9 June");
     expect(html).not.toContain("Wednesday, 10 June");
+    expect(html).not.toContain("FF26 – Day 1 (8.6.26)");
+    expect(html).not.toContain("FF26 - Day 2 (9.6.26)");
     expect(html).toContain("We Don&#39;t Have an Idea Problem. We Have a Permission Problem.");
     expect(html).toContain("Pasi Sillanpää");
     expect(html).toContain("Arrived");

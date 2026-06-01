@@ -28,6 +28,9 @@ describe("renderSlideDeckPage", () => {
     const html = renderSlideDeckPage(parseSlideData(fallbackSlideData, emptySlideData));
 
     expect(html).toContain("Future Frontend 2026 Break Slides");
+    expect(html).toContain("FF26 – Day 1 (8.6.26)");
+    expect(html).toContain("FF26 - Day 2 (9.6.26)");
+    expect(html).toContain("divider-slide");
     expect(html).toContain("Next session");
     expect(html).toContain("Conference registration");
     expect(html).toContain("Welcome");
@@ -49,6 +52,6 @@ describe("renderSlideDeckPage", () => {
     expect(html).not.toContain("https://futurefrontend.com/img/");
     expect(html).not.toContain("slide-count");
     expect(html).not.toContain("Stryker was here!");
-    expect(html.match(/data-break-slide/g)).toHaveLength(42);
+    expect(html.match(/data-break-slide/g)).toHaveLength(44);
   });
 });

@@ -11,6 +11,7 @@ export type Talk = {
 export type BreakSlide = {
   day: string;
   label?: string;
+  variant?: "divider";
   time: string;
   session: string;
   talks?: Talk[];

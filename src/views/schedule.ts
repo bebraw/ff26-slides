@@ -33,6 +33,10 @@ function groupScheduleDays(breakSlides: BreakSlide[]): ScheduleDay[] {
   const indexByDay = new Map<string, ScheduleDay>();
 
   for (const slide of breakSlides) {
+    if (slide.variant === "divider") {
+      continue;
+    }
+
     let day = indexByDay.get(slide.day);
 
     if (!day) {

@@ -6,20 +6,21 @@ describe("parseSlideData", () => {
   it("accepts fallback JSON slide data", () => {
     const slideData = parseSlideData(fallbackSlideData, emptySlideData);
 
-    expect(slideData.breakSlides[0]?.session).toBe("Conference registration");
+    expect(slideData.breakSlides[0]?.session).toBe("FF26 – Day 1 (8.6.26)");
+    expect(slideData.breakSlides[1]?.session).toBe("Conference registration");
     expect(slideData.sponsors[0]?.size).toBe("tech");
   });
 
   it("accepts stringified slide data", () => {
     const slideData = parseSlideData(
       JSON.stringify({
-        breakSlides: [{ day: "Monday, 8 June", time: "09:00-09:15", session: "Welcome", label: "Opening" }],
+        breakSlides: [{ day: "Monday, 8 June", time: "09:00-09:15", session: "Welcome", label: "Opening", variant: "divider" }],
         sponsors: [{ name: "Sponsor", image: "/img/sponsor.svg", size: "brand" }],
       }),
       emptySlideData,
     );
 
-    expect(slideData.breakSlides[0]).toMatchObject({ label: "Opening", session: "Welcome" });
+    expect(slideData.breakSlides[0]).toMatchObject({ label: "Opening", session: "Welcome", variant: "divider" });
     expect(slideData.sponsors[0]?.size).toBe("brand");
   });
 
@@ -34,6 +35,9 @@ describe("parseSlideData", () => {
     expect(parseSlideData({ breakSlides: [{ day: "Monday", time: "09:00", session: "Welcome", label: 42 }], sponsors: [] }, fallback)).toBe(
       fallback,
     );
+    expect(
+      parseSlideData({ breakSlides: [{ day: "Monday", time: "09:00", session: "Welcome", variant: "title" }], sponsors: [] }, fallback),
+    ).toBe(fallback);
     expect(
       parseSlideData(
         {

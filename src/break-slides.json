@@ -2,6 +2,12 @@
   "breakSlides": [
     {
       "day": "Monday, 8 June",
+      "time": "",
+      "session": "FF26 – Day 1 (8.6.26)",
+      "variant": "divider"
+    },
+    {
+      "day": "Monday, 8 June",
       "time": "08:00-08:50",
       "session": "Conference registration"
     },
@@ -98,6 +104,12 @@
       "day": "Monday, 8 June",
       "time": "17:30-20:30",
       "session": "Mobile Mates meetup"
+    },
+    {
+      "day": "Tuesday, 9 June",
+      "time": "",
+      "session": "FF26 - Day 2 (9.6.26)",
+      "variant": "divider"
     },
     {
       "day": "Tuesday, 9 June",

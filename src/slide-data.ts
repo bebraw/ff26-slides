@@ -33,6 +33,10 @@ function isBreakSlide(value: unknown): value is BreakSlide {
     return false;
   }
 
+  if (value.variant !== undefined && value.variant !== "divider") {
+    return false;
+  }
+
   return value.talks === undefined || (Array.isArray(value.talks) && value.talks.every(isTalk));
 }
 

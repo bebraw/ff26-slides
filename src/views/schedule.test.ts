@@ -12,6 +12,8 @@ describe("renderSchedulePage", () => {
     expect(html).toContain("Monday, 8 June");
     expect(html).toContain("Tuesday, 9 June");
     expect(html).toContain("Conference registration");
+    expect(html).not.toContain("FF26 – Day 1 (8.6.26)");
+    expect(html).not.toContain("FF26 - Day 2 (9.6.26)");
     expect(html).toContain("We Don&#39;t Have an Idea Problem. We Have a Permission Problem.");
     expect(html).toContain("Pasi Sillanpää");
     expect(html).toContain('class="schedule-sheet"');
@@ -29,6 +31,7 @@ describe("renderSchedulePage", () => {
     const html = renderSchedulePage({
       breakSlides: [
         { day: "Monday, 8 June", time: "08:00-08:50", session: "Conference registration" },
+        { day: "Monday, 8 June", time: "", session: "FF26 – Day 1 (8.6.26)", variant: "divider" },
         {
           day: "Monday, 8 June",
           time: "09:00-10:00",
