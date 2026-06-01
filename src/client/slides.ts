@@ -1,5 +1,7 @@
 const slideSelector = "[data-break-slide]";
 const activeAttribute = "data-active-slide";
+const minimumSwipeDistance = 48;
+const minimumSwipeRatio = 1.5;
 
 type SlideWindow = {
   history: Pick<History, "replaceState">;
@@ -19,8 +21,15 @@ export function initializeSlides(documentRef: Pick<Document, "addEventListener" 
   }
 
   let currentIndex = getInitialIndex(windowRef, slides.length);
+  let touchStart: TouchPoint | undefined;
 
   showSlide(slides, currentIndex);
+
+  const navigate = (direction: -1 | 1): void => {
+    currentIndex = clamp(currentIndex + direction, 0, slides.length - 1);
+    showSlide(slides, currentIndex);
+    persistSlide(windowRef, currentIndex);
+  };
 
   documentRef.addEventListener("keydown", (event) => {
     if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
@@ -29,20 +38,46 @@ export function initializeSlides(documentRef: Pick<Document, "addEventListener" 
 
     if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") {
       event.preventDefault();
-      currentIndex = Math.min(currentIndex + 1, slides.length - 1);
-      showSlide(slides, currentIndex);
-      persistSlide(windowRef, currentIndex);
+      navigate(1);
       return;
     }
 
     if (event.key === "ArrowLeft" || event.key === "PageUp" || event.key === "Backspace") {
       event.preventDefault();
-      currentIndex = Math.max(currentIndex - 1, 0);
-      showSlide(slides, currentIndex);
-      persistSlide(windowRef, currentIndex);
+      navigate(-1);
     }
   });
+
+  documentRef.addEventListener("touchstart", (event) => {
+    touchStart = getTouchPoint(event);
+  });
+
+  documentRef.addEventListener(
+    "touchend",
+    (event) => {
+      if (!touchStart) {
+        return;
+      }
+
+      const touchEnd = getTouchPoint(event);
+      const swipe = touchEnd ? getHorizontalSwipe(touchStart, touchEnd) : undefined;
+      touchStart = undefined;
+
+      if (!swipe) {
+        return;
+      }
+
+      event.preventDefault();
+      navigate(swipe === "left" ? 1 : -1);
+    },
+    { passive: false },
+  );
 }
+
+type TouchPoint = {
+  x: number;
+  y: number;
+};
 
 function getInitialIndex(windowRef: Pick<SlideWindow, "location">, slideCount: number): number {
   const params = new URLSearchParams(windowRef.location.search);
@@ -72,6 +107,27 @@ function persistSlide(windowRef: SlideWindow, index: number): void {
   const url = new URL(windowRef.location.href);
   url.searchParams.set("slide", String(index + 1));
   windowRef.history.replaceState({}, "", url);
+}
+
+function getTouchPoint(event: TouchEvent): TouchPoint | undefined {
+  const touch = event.changedTouches[0];
+
+  if (!touch) {
+    return undefined;
+  }
+
+  return { x: touch.clientX, y: touch.clientY };
+}
+
+function getHorizontalSwipe(start: TouchPoint, end: TouchPoint): "left" | "right" | undefined {
+  const deltaX = end.x - start.x;
+  const deltaY = end.y - start.y;
+
+  if (Math.abs(deltaX) < minimumSwipeDistance || Math.abs(deltaX) < Math.abs(deltaY) * minimumSwipeRatio) {
+    return undefined;
+  }
+
+  return deltaX < 0 ? "left" : "right";
 }
 
 function clamp(value: number, minimum: number, maximum: number): number {

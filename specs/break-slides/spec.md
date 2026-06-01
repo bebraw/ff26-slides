@@ -18,7 +18,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - **Stream dividers:** The slide deck includes `divider` break-slide variants for the first two conference days: `FF26 – Day 1 (8.6.26)` and `FF26 - Day 2 (9.6.26)`. These render only in `/slides`, not in printable schedule or speaker check-in sheets.
 - **Sync environment:** GraphQL values are build-time sync inputs. They stay in `.dev.vars`, shell/CI environment variables, or Cloudflare build variables and secrets, not Worker runtime configuration.
 - **Talk slides:** `src/views/home.ts` derives one standalone slide per talk from the same session data, directly after the containing session overview slide.
-- **Navigation:** `src/client/slides.ts` handles left/right arrow navigation and stores the current slide in the `slide` query parameter.
+- **Navigation:** `src/client/slides.ts` handles left/right arrow navigation and horizontal touch swipe navigation, storing the current slide in the `slide` query parameter.
 - **Print layout:** `src/tailwind-input.css` defaults print output to 16:10 slide pages and uses a named A4 portrait page for schedule and speaker check-in sheets.
 - **Client build:** `npm run build:client` compiles the typed client module to `.generated/client/slides.js`, copies the served text asset to `.generated/client/slides.client.txt`, and `npm run build` runs both CSS and client builds.
 - **Assets:** The deck serves the provided Future Frontend logo at `/assets/ff26-logo.svg` and Finlandica Headline at `/fonts/FinlandicaHeadline-Regular.ttf`.
@@ -29,7 +29,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 ### Anti-Patterns
 
 - Do not add inline browser scripts to Worker-rendered HTML.
-- Do not add a heavyweight slideshow framework for this small keyboard-controlled deck.
+- Do not add a heavyweight slideshow framework for this small keyboard- and touch-controlled deck.
 - Do not call the GraphQL API from public Worker request handling.
 - Do not commit GraphQL tokens or other sync secrets.
 - Do not put GraphQL sync secret names or values in `wrangler.jsonc`; the Worker runtime does not require them.
@@ -56,9 +56,10 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - [ ] Stream divider slides for Day 1 and Day 2 render in the slide deck without appearing in print tools.
 - [ ] The footer shows tech and brand sponsor logos on one horizontal line, with tech sponsors larger.
 - [ ] Arrow keys can move between slides.
+- [ ] Horizontal touch swipes can move between slides on mobile and tablet browsers.
 - [ ] The active slide is represented as a one-based `slide` query parameter.
 - [ ] The deck includes the provided logo and Finlandica Headline font.
-- [ ] Automated tests cover the rendered deck, generated client module route, static asset routes, and keyboard navigation.
+- [ ] Automated tests cover the rendered deck, generated client module route, static asset routes, keyboard navigation, and touch swipe navigation.
 
 ### Regression Guardrails
 
@@ -117,6 +118,12 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 
 - Given: the `/slides` deck is open in a browser
 - When: the organizer presses the right arrow key
+- Then: the next session, talk, or schedule slide becomes visible and the URL updates to `?slide=<number>`
+
+**Scenario: Organizer advances slides on touch devices**
+
+- Given: the `/slides` deck is open on a mobile or tablet browser
+- When: the organizer swipes left across the slide
 - Then: the next session, talk, or schedule slide becomes visible and the URL updates to `?slide=<number>`
 
 **Scenario: Organizer views the daily schedule**

@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { initializeSlides } from "./slides";
 
 type CapturedKeyHandler = (event: KeyboardEvent) => void;
+type CapturedTouchHandler = (event: TouchEvent) => void;
 
 class FakeSlide {
   readonly attributes = new Map<string, string>();
@@ -30,7 +31,7 @@ describe("initializeSlides", () => {
     await import("./slides");
 
     expect(slides[0]?.attributes.get("data-active-slide")).toBe("true");
-    expect(handler.document.addEventListener).toHaveBeenCalledOnce();
+    expect(handler.document.addEventListener).toHaveBeenCalledTimes(3);
   });
 
   it("activates the query-selected slide and persists keyboard navigation", () => {
@@ -44,7 +45,7 @@ describe("initializeSlides", () => {
     expect(slides[0]?.attributes.get("aria-hidden")).toBe("true");
     expect(slides[1]?.attributes.get("data-active-slide")).toBe("true");
     expect(slides[2]?.attributes.get("aria-hidden")).toBe("true");
-    expect(handler.current).toBeTypeOf("function");
+    expect(handler.handlers.keydown).toBeTypeOf("function");
 
     const nextEvent = trigger("ArrowRight");
 
@@ -58,6 +59,52 @@ describe("initializeSlides", () => {
     expect(previousEvent.preventDefault).toHaveBeenCalledOnce();
     expect(slides[1]?.attributes.get("data-active-slide")).toBe("true");
     expect(history.replaceState).toHaveBeenLastCalledWith({}, "", new URL("http://deck.test/?slide=2"));
+  });
+
+  it("persists touch swipe navigation", () => {
+    const { handler, history, slides, triggerTouchEnd, triggerTouchStart } = createBrowserHarness(
+      [new FakeSlide(), new FakeSlide(), new FakeSlide()],
+      "http://deck.test/?slide=2",
+    );
+
+    initializeSlides(handler.document, handler.window);
+
+    triggerTouchStart({ x: 240, y: 120 });
+    const nextEvent = triggerTouchEnd({ x: 120, y: 124 });
+
+    expect(nextEvent.preventDefault).toHaveBeenCalledOnce();
+    expect(slides[2]?.attributes.get("data-active-slide")).toBe("true");
+    expect(history.replaceState).toHaveBeenLastCalledWith({}, "", new URL("http://deck.test/?slide=3"));
+
+    triggerTouchStart({ x: 120, y: 120 });
+    const previousEvent = triggerTouchEnd({ x: 220, y: 118 });
+
+    expect(previousEvent.preventDefault).toHaveBeenCalledOnce();
+    expect(slides[1]?.attributes.get("data-active-slide")).toBe("true");
+    expect(history.replaceState).toHaveBeenLastCalledWith({}, "", new URL("http://deck.test/?slide=2"));
+  });
+
+  it("ignores vertical or short touch movement", () => {
+    const { handler, history, slides, triggerTouchEnd, triggerTouchStart } = createBrowserHarness(
+      [new FakeSlide(), new FakeSlide()],
+      "http://deck.test/",
+    );
+
+    initializeSlides(handler.document, handler.window);
+
+    triggerTouchStart({ x: 100, y: 100 });
+    const verticalEvent = triggerTouchEnd({ x: 130, y: 180 });
+
+    expect(verticalEvent.preventDefault).not.toHaveBeenCalled();
+    expect(history.replaceState).not.toHaveBeenCalled();
+    expect(slides[0]?.attributes.get("data-active-slide")).toBe("true");
+
+    triggerTouchStart({ x: 100, y: 100 });
+    const shortEvent = triggerTouchEnd({ x: 60, y: 100 });
+
+    expect(shortEvent.preventDefault).not.toHaveBeenCalled();
+    expect(history.replaceState).not.toHaveBeenCalled();
+    expect(slides[0]?.attributes.get("data-active-slide")).toBe("true");
   });
 
   it("clamps invalid query parameters and ignores modified key presses", () => {
@@ -97,13 +144,19 @@ function createBrowserHarness(
   href: string,
 ): {
   handler: {
-    current: CapturedKeyHandler | undefined;
+    handlers: {
+      keydown: CapturedKeyHandler | undefined;
+      touchend: CapturedTouchHandler | undefined;
+      touchstart: CapturedTouchHandler | undefined;
+    };
     document: Pick<Document, "addEventListener" | "querySelectorAll">;
     window: Parameters<typeof initializeSlides>[1];
   };
   history: Pick<History, "replaceState"> & { replaceState: ReturnType<typeof vi.fn> };
   slides: FakeSlide[];
   trigger: (key: string, modifiers?: Partial<KeyboardEvent>) => KeyboardEvent & { preventDefault: ReturnType<typeof vi.fn> };
+  triggerTouchEnd: (point: TouchPoint) => TouchEvent & { preventDefault: ReturnType<typeof vi.fn> };
+  triggerTouchStart: (point: TouchPoint) => TouchEvent & { preventDefault: ReturnType<typeof vi.fn> };
 } {
   const location = new URL(href) as unknown as Location;
   const history = {
@@ -112,16 +165,32 @@ function createBrowserHarness(
     }),
   };
   const handler: {
-    current: CapturedKeyHandler | undefined;
+    handlers: {
+      keydown: CapturedKeyHandler | undefined;
+      touchend: CapturedTouchHandler | undefined;
+      touchstart: CapturedTouchHandler | undefined;
+    };
     document: Pick<Document, "addEventListener" | "querySelectorAll">;
     window: Parameters<typeof initializeSlides>[1];
   } = {
-    current: undefined,
+    handlers: {
+      keydown: undefined,
+      touchend: undefined,
+      touchstart: undefined,
+    },
     document: {
       querySelectorAll: vi.fn(() => slides as unknown as NodeListOf<HTMLElement>),
       addEventListener: vi.fn((event: string, listener: EventListenerOrEventListenerObject) => {
         if (event === "keydown" && typeof listener === "function") {
-          handler.current = listener as CapturedKeyHandler;
+          handler.handlers.keydown = listener as CapturedKeyHandler;
+        }
+
+        if (event === "touchstart" && typeof listener === "function") {
+          handler.handlers.touchstart = listener as CapturedTouchHandler;
+        }
+
+        if (event === "touchend" && typeof listener === "function") {
+          handler.handlers.touchend = listener as CapturedTouchHandler;
         }
       }),
     },
@@ -143,9 +212,35 @@ function createBrowserHarness(
         ...modifiers,
       } as KeyboardEvent & { preventDefault: ReturnType<typeof vi.fn> };
 
-      handler.current?.(event);
+      handler.handlers.keydown?.(event);
+
+      return event;
+    },
+    triggerTouchEnd(point: TouchPoint) {
+      const event = createTouchEvent(point);
+
+      handler.handlers.touchend?.(event);
+
+      return event;
+    },
+    triggerTouchStart(point: TouchPoint) {
+      const event = createTouchEvent(point);
+
+      handler.handlers.touchstart?.(event);
 
       return event;
     },
   };
+}
+
+type TouchPoint = {
+  x: number;
+  y: number;
+};
+
+function createTouchEvent(point: TouchPoint): TouchEvent & { preventDefault: ReturnType<typeof vi.fn> } {
+  return {
+    changedTouches: [{ clientX: point.x, clientY: point.y }] as unknown as TouchList,
+    preventDefault: vi.fn(),
+  } as TouchEvent & { preventDefault: ReturnType<typeof vi.fn> };
 }
