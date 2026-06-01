@@ -63,6 +63,7 @@ No accepted-only ADRs are currently pending implementation.
 | [ADR-028](./implemented/ADR-028-sync-break-slides-from-graphql.md)                    | Implemented | Refresh break slide schedule data from GraphQL at sync time instead of Worker request time.    |
 | [ADR-029](./implemented/ADR-029-use-incremental-local-mutation-gate.md)               | Implemented | Use Stryker incremental mode for repeated local quality-gate runs.                             |
 | [ADR-030](./implemented/ADR-030-use-relative-stryker-concurrency.md)                  | Implemented | Set Stryker worker concurrency relative to available host parallelism.                         |
+| [ADR-031](./implemented/ADR-031-lock-local-agent-ci-installs.md)                      | Implemented | Serialize local Agent CI dependency installs against the shared warm dependency mount.         |
 
 ## Creating A New ADR
 
