@@ -11,6 +11,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - **Entry point:** `GET /` renders an index linking to the available slide and print tools.
 - **Slide deck view:** `GET /slides` renders the break slide deck.
 - **Opening deck view:** `GET /opening` renders the conference opening slide deck using the same visual style and slide navigation as the break slide deck.
+- **Closing deck view:** `GET /closing` renders the conference closing slide deck using the same visual style and slide navigation as the break and opening slide decks.
 - **Schedule view:** `GET /schedule` renders one day schedule sheet at a time on screen and all day sheets for A4 printing.
 - **Speaker check-in view:** `GET /speaker-checkin` renders one talk-day check-in sheet at a time on screen and all talk-day sheets for A4 printing.
 - **Slide source:** `.generated/break-slides.json` contains the generated 2026 conference session data consumed by the Worker when present.
@@ -20,6 +21,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - **Sync environment:** GraphQL values are build-time sync inputs. They stay in `.dev.vars`, shell/CI environment variables, or Cloudflare build variables and secrets, not Worker runtime configuration.
 - **Talk slides:** `src/views/home.ts` derives one standalone slide per talk from the same session data, directly after the containing session overview slide.
 - **Opening slides:** `src/views/opening.ts` renders the conference opening deck with a logo-only first slide, fixed event-introduction content, an 18-speaker photo grid derived from talk data, MC photos from conference or local asset image paths, sponsor tiers from `SlideData.sponsors`, and schedule-derived session overview and meetup slides.
+- **Closing slides:** `src/views/closing.ts` renders the conference closing deck with a retrospective timeline, conference numbers, topic follow-up notes, curated Flickr photo slides, thanks, an SDLCAI continuation slide, and a final `Thanks for the fish` slide.
 - **Navigation:** `src/client/slides.ts` handles left/right arrow navigation and horizontal touch swipe navigation, storing the current slide in the `slide` query parameter.
 - **Print layout:** `src/tailwind-input.css` defaults print output to 16:10 slide pages and uses a named A4 portrait page for schedule and speaker check-in sheets.
 - **Client build:** `npm run build:client` compiles the typed client module to `.generated/client/slides.js`, copies the served text asset to `.generated/client/slides.client.txt`, and `npm run build` runs both CSS and client builds.
@@ -46,6 +48,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - [ ] The root route renders an index of the slide and print tools.
 - [ ] The slides route renders a full-viewport black-and-white slide deck.
 - [ ] The opening route renders a full-viewport black-and-white opening slide deck.
+- [ ] The closing route renders a full-viewport black-and-white closing slide deck.
 - [ ] Printing the slides route uses 16:10 pages by default.
 - [ ] The schedule route renders one daily schedule sheet at a time on screen.
 - [ ] Printing the schedule route produces one A4 portrait sheet per day.
@@ -59,6 +62,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - [ ] Stream divider slides for Day 1 and Day 2 render in the slide deck without appearing in print tools.
 - [ ] The footer shows tech and brand sponsor logos on one horizontal line, with tech sponsors larger.
 - [ ] The opening deck includes the approved introduction slides: logo-only title slide, welcome, MCs, edition, attendee count, workshop count, 18-speaker photo grid, conference format, themed session overview, hallway track, sponsor tiers, meetups, code of conduct, hashtag, Q&A URL, and Slack link.
+- [ ] The closing deck includes the approved retrospective slides: title, four-edition timeline, numbers, early-signal topics, curated photo slides, thanks, SDLCAI handoff, and `Thanks for the fish`.
 - [ ] Arrow keys can move between slides.
 - [ ] Horizontal touch swipes can move between slides on mobile and tablet browsers.
 - [ ] The active slide is represented as a one-based `slide` query parameter.
@@ -69,8 +73,10 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 
 - `GET /` must keep linking to `/slides`, `/schedule`, and `/speaker-checkin`.
 - `GET /` must keep linking to `/opening`.
+- `GET /` must keep linking to `/closing`.
 - `GET /slides` must keep rendering the deck title and conference sessions.
 - `GET /opening` must keep rendering the opening deck logo title slide, MCs, 18-speaker photo grid, sponsor tiers, meetups, code of conduct, hashtag, Q&A URL, and Slack link.
+- `GET /closing` must keep rendering the closing deck title slide, four-edition timeline, early-signal topics, curated photo slides, SDLCAI handoff, and final `Thanks for the fish` slide.
 - `GET /slides` must keep rendering standalone slides for individual talks from talk-session data.
 - `GET /slides` must keep rendering the Day 1 and Day 2 stream divider slides.
 - `GET /schedule` must keep rendering daily schedule sheets from the same slide data.
@@ -83,12 +89,13 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - `GET /fonts/FinlandicaHeadline-Regular.ttf` must return the Finlandica font.
 - Worker/view runtime files must remain free of inline script bodies, inline event handlers, and `javascript:` URLs.
 - Worker request handling must remain free of GraphQL schedule fetches and GraphQL API tokens.
-- The route list returned by `/api/health` must include `/opening` and `/slides.js`.
+- The route list returned by `/api/health` must include `/opening`, `/closing`, and `/slides.js`.
 
 ### Verification
 
 - **Unit tests:** `src/views/home.test.ts` and `src/worker.test.ts`
 - **Opening unit tests:** `src/views/opening.test.ts`
+- **Closing unit tests:** `src/views/closing.test.ts`
 - **Schedule unit tests:** `src/views/schedule.test.ts`
 - **Speaker check-in unit tests:** `src/views/speaker-checkin.test.ts`
 - **Browser tests:** `src/worker.e2e.ts`
@@ -114,6 +121,18 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - Given: the opening route is open
 - When: the organizer advances through the deck
 - Then: the approved opening slides are visible using the same slide style and navigation as the break deck
+
+**Scenario: Organizer closes the conference**
+
+- Given: the closing route is open
+- When: the organizer advances through the deck
+- Then: the approved closing slides are visible using the same slide style and navigation as the break and opening decks
+
+**Scenario: Attendee sees what continues**
+
+- Given: the closing route is open
+- When: the SDLCAI handoff slide is active
+- Then: attendees can see the 13 October 2026 seminar date, venue, and `sdlcai.org` preregistration URL
 
 **Scenario: Organizer refreshes the schedule**
 

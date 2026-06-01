@@ -70,6 +70,7 @@ function renderIndexLink(route: { path: string; purpose: string }): string {
     ["/", "Index"],
     ["/slides", "Slides"],
     ["/opening", "Opening"],
+    ["/closing", "Closing"],
     ["/schedule", "Schedule"],
     ["/speaker-checkin", "Speaker check-in"],
   ]);

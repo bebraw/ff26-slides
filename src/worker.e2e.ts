@@ -6,6 +6,7 @@ test("renders the index page", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1, name: "Future Frontend 2026" })).toBeVisible();
   await expect(page.getByRole("link", { name: /Slides Future Frontend 2026 break slide deck/u })).toBeVisible();
   await expect(page.getByRole("link", { name: /Opening Future Frontend 2026 opening slide deck/u })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Closing Future Frontend 2026 closing slide deck/u })).toBeVisible();
   await expect(page.getByRole("link", { name: /Schedule Printable daily conference schedules/u })).toBeVisible();
   await expect(page.getByRole("link", { name: /Speaker check-in Printable daily speaker check-in sheets/u })).toBeVisible();
 });
@@ -77,6 +78,22 @@ test("renders the opening slide deck", async ({ page }) => {
   for (const row of meetupRows) {
     expect(row.timeRight).toBeLessThanOrEqual(row.titleLeft);
   }
+});
+
+test("renders the closing slide deck", async ({ page }) => {
+  await page.goto("/closing", { waitUntil: "domcontentloaded" });
+
+  await expect(page.locator('[data-active-slide="true"] .opening-title-logo')).toBeVisible();
+  await page.keyboard.press("ArrowRight");
+  await expect(page).toHaveURL(/slide=2/);
+  await expect(page.getByText("The last edition in this series")).toBeVisible();
+  await page.goto("/closing?slide=4", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("heading", { level: 1, name: "Early signals" })).toBeVisible();
+  await expect(page.getByText("SolidJS and reactivity")).toBeVisible();
+  await expect(page.getByText("AI-first frontend work")).toBeVisible();
+  await page.goto("/closing?slide=8", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("heading", { level: 1, name: "AI meets SDLC" })).toBeVisible();
+  await expect(page.getByText("sdlcai.org")).toBeVisible();
 });
 
 test("keeps individual talk slides inside the viewport", async ({ page }) => {
@@ -174,7 +191,7 @@ test("serves the health endpoint", async ({ request }) => {
   await expect(response.json()).resolves.toEqual({
     ok: true,
     name: "vibe-template-worker",
-    routes: ["/", "/slides", "/opening", "/schedule", "/speaker-checkin", "/api/health", "/slides.js"],
+    routes: ["/", "/slides", "/opening", "/closing", "/schedule", "/speaker-checkin", "/api/health", "/slides.js"],
   });
 });
 

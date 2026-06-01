@@ -24,6 +24,7 @@ describe("worker", () => {
     expect(body).toContain("Future Frontend 2026 Tools");
     expect(body).toContain('href="/slides"');
     expect(body).toContain('href="/opening"');
+    expect(body).toContain('href="/closing"');
     expect(body).toContain('href="/schedule"');
     expect(body).toContain('href="/speaker-checkin"');
     expect(body).not.toContain("data-break-slide");
@@ -60,6 +61,21 @@ describe("worker", () => {
     expect(body).toContain("/slides.js");
   });
 
+  it("renders the closing slide deck", async () => {
+    const response = await handleRequest(new Request("http://example.com/closing"));
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toContain("text/html");
+    expect(response.headers.get("cache-control")).toBe("no-store");
+
+    const body = await response.text();
+    expect(body).toContain("Future Frontend 2026 Closing Slides");
+    expect(body).toContain("Early signals");
+    expect(body).toContain("AI meets SDLC");
+    expect(body).toContain("Thanks for the fish");
+    expect(body).toContain("/slides.js");
+  });
+
   it("returns a JSON health response", async () => {
     const response = await handleRequest(new Request("http://example.com/api/health"));
 
@@ -68,7 +84,7 @@ describe("worker", () => {
     await expect(response.json()).resolves.toEqual({
       ok: true,
       name: "vibe-template-worker",
-      routes: ["/", "/slides", "/opening", "/schedule", "/speaker-checkin", "/api/health", "/slides.js"],
+      routes: ["/", "/slides", "/opening", "/closing", "/schedule", "/speaker-checkin", "/api/health", "/slides.js"],
     });
   });
 

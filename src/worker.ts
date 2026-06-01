@@ -3,6 +3,7 @@ import { exampleRoutes } from "./app-routes";
 import { emptySlideData, parseSlideData, type SlideData } from "./slide-data";
 import { renderHomePage, renderSlideDeckPage } from "./views/home";
 import { renderNotFoundPage } from "./views/not-found";
+import { renderClosingSlideDeckPage } from "./views/closing";
 import { renderOpeningSlideDeckPage } from "./views/opening";
 import { renderSchedulePage } from "./views/schedule";
 import { renderSpeakerCheckInPage } from "./views/speaker-checkin";
@@ -51,6 +52,10 @@ export async function handleRequest(request: Request): Promise<Response> {
 
   if (url.pathname === "/opening") {
     return htmlResponse(renderOpeningSlideDeckPage(await loadSlideData()));
+  }
+
+  if (url.pathname === "/closing") {
+    return htmlResponse(renderClosingSlideDeckPage());
   }
 
   if (url.pathname === "/schedule") {

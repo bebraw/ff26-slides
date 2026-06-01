@@ -13,10 +13,12 @@ describe("renderHomePage", () => {
     expect(html).not.toContain('href="/"');
     expect(html).toContain('href="/slides"');
     expect(html).toContain('href="/opening"');
+    expect(html).toContain('href="/closing"');
     expect(html).toContain('href="/schedule"');
     expect(html).toContain('href="/speaker-checkin"');
     expect(html).toContain("Future Frontend 2026 break slide deck");
     expect(html).toContain("Future Frontend 2026 opening slide deck");
+    expect(html).toContain("Future Frontend 2026 closing slide deck");
     expect(html).toContain("Printable daily conference schedules");
     expect(html).toContain("Printable daily speaker check-in sheets");
     expect(html).not.toContain("/api/health");
