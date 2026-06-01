@@ -19,12 +19,11 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - **Sync environment:** GraphQL values are build-time sync inputs. They stay in `.dev.vars`, shell/CI environment variables, or Cloudflare build variables and secrets, not Worker runtime configuration.
 - **Talk slides:** `src/views/home.ts` derives one standalone slide per talk from the same session data, directly after the containing session overview slide.
 - **Navigation:** `src/client/slides.ts` handles left/right arrow navigation and stores the current slide in the `slide` query parameter.
-- **Print layout:** `src/tailwind-input.css` includes print media rules for A4 portrait schedule and speaker check-in sheets.
-- **Print color:** Schedule and speaker check-in PDF exports preserve their screen background colors through print color adjustment rules.
+- **Print layout:** `src/tailwind-input.css` defaults print output to 16:10 slide pages and uses a named A4 portrait page for schedule and speaker check-in sheets.
 - **Client build:** `npm run build:client` compiles the typed client module to `.generated/client/slides.js`, copies the served text asset to `.generated/client/slides.client.txt`, and `npm run build` runs both CSS and client builds.
 - **Assets:** The deck serves the provided Future Frontend logo at `/assets/ff26-logo.svg` and Finlandica Headline at `/fonts/FinlandicaHeadline-Regular.ttf`.
 - **Conference image proxy:** `GET /img/*` fetches matching `futurefrontend.com/img/*` speaker and sponsor images server-side so rendered pages do not hotlink browser image requests to the main conference site.
-- **Styling:** `src/tailwind-input.css` defines the black-and-white 16:9 slide layout and uses Finlandica Headline.
+- **Styling:** `src/tailwind-input.css` defines the black-and-white screen slide layout, 16:10 print slide output, and uses Finlandica Headline.
 - **Sponsor strip:** Tech sponsors receive larger logo slots than brand sponsors in one horizontal footer strip.
 
 ### Anti-Patterns
@@ -44,6 +43,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 
 - [ ] The root route renders an index of the slide and print tools.
 - [ ] The slides route renders a full-viewport black-and-white slide deck.
+- [ ] Printing the slides route uses 16:10 pages by default.
 - [ ] The schedule route renders one daily schedule sheet at a time on screen.
 - [ ] Printing the schedule route produces one A4 portrait sheet per day.
 - [ ] The speaker check-in route renders one talk-day check-in sheet at a time on screen.

@@ -159,5 +159,8 @@ test("serves the generated stylesheet", async ({ request }) => {
 
   expect(response.ok()).toBe(true);
   expect(response.headers()["content-type"]).toContain("text/css");
-  await expect(response.text()).resolves.toContain("--color-app-canvas:#f3eee6");
+  const stylesheet = await response.text();
+  expect(stylesheet).toContain("--color-app-canvas:#f3eee6");
+  expect(stylesheet).toContain("@page{size:16in 10in;margin:0}");
+  expect(stylesheet).toContain("@page schedule-sheet{size:A4 portrait;margin:12mm}");
 });
