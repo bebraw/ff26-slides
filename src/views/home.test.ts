@@ -10,6 +10,7 @@ describe("renderHomePage", () => {
 
     expect(html).toContain("Future Frontend 2026 Tools");
     expect(html).toContain("Organizer tools");
+    expect(html).not.toContain('href="/"');
     expect(html).toContain('href="/slides"');
     expect(html).toContain('href="/schedule"');
     expect(html).toContain('href="/speaker-checkin"');

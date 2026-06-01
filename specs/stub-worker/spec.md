@@ -36,6 +36,7 @@ The project keeps the lightweight Cloudflare Worker shell from the starter while
 ### Regression Guardrails
 
 - `GET /` must keep returning HTML with recognizable Future Frontend slide content.
+- The root index must list organizer tools without linking back to itself.
 - `GET /styles.css` must keep returning the generated stylesheet.
 - `GET /slides.js` must keep returning the generated client module.
 - Worker/view runtime files must remain free of inline executable browser code.

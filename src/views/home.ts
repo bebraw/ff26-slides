@@ -18,7 +18,7 @@ type DeckSlide =
     };
 
 export function renderHomePage(routes: Array<{ path: string; purpose: string }>): string {
-  const visibleRoutes = routes.filter((route) => !route.path.startsWith("/api/") && route.path !== "/slides.js");
+  const visibleRoutes = routes.filter((route) => route.path !== "/" && !route.path.startsWith("/api/") && route.path !== "/slides.js");
 
   return `<!doctype html>
 <html lang="en">
