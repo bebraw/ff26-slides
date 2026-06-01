@@ -64,6 +64,7 @@ No accepted-only ADRs are currently pending implementation.
 | [ADR-029](./implemented/ADR-029-use-incremental-local-mutation-gate.md)               | Implemented | Use Stryker incremental mode for repeated local quality-gate runs.                             |
 | [ADR-030](./implemented/ADR-030-use-relative-stryker-concurrency.md)                  | Implemented | Set Stryker worker concurrency relative to available host parallelism.                         |
 | [ADR-031](./implemented/ADR-031-lock-local-agent-ci-installs.md)                      | Implemented | Serialize local Agent CI dependency installs against the shared warm dependency mount.         |
+| [ADR-032](./implemented/ADR-032-skip-local-agent-ci-mutation-job.md)                  | Implemented | Skip full mutation testing in local Agent CI while keeping it enabled on GitHub Actions.       |
 
 ## Creating A New ADR
 

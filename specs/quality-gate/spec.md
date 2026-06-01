@@ -18,6 +18,7 @@ The template needs a verification baseline that stays strict enough for end-to-e
 - **Local workflow:** `npm run ci:local`
 - **Local workflow concurrency:** Agent CI job auto-concurrency
 - **Local workflow failure mode:** pause failed Agent CI runners for retry
+- **Local workflow mutation policy:** local Agent CI skips the full mutation job; use `npm run quality:gate` or `npm run mutation` for local mutation verification
 - **Retry command:** `npm run ci:local:retry -- --name <runner-name>`
 - **Remote workflow:** `.github/workflows/ci.yml`
 - **CI install wrapper:** `scripts/ci-install-dependencies.sh`
@@ -55,7 +56,7 @@ The template needs a verification baseline that stays strict enough for end-to-e
 - [ ] The incremental mutation gate reuses prior Stryker results for repeated local quality-gate runs while preserving a complete mutation report.
 - [ ] The full gate runs the fast, browser, and incremental mutation gates in order.
 - [ ] The repo-managed `pre-push` hook runs affected-file guardrails before a push leaves the machine.
-- [ ] Local and remote CI use the same split verification model for non-documentation changes.
+- [ ] Local Agent CI runs the fast and browser jobs, while GitHub Actions also runs the full mutation job.
 - [ ] Documentation-only changes can skip Agent CI when they do not alter executable behavior or workflow configuration.
 - [ ] The spec is updated in the same change set.
 
@@ -89,6 +90,7 @@ The template needs a verification baseline that stays strict enough for end-to-e
 - The repo's local CI scripts should use the repo-pinned `agent-ci` binary directly instead of carrying repo-specific runtime patching.
 - The canonical local CI script should rely on the CI install wrapper instead of forcing `--jobs 1` to avoid warmed dependency races on macOS-hosted Docker.
 - The canonical local CI script should use pause-on-failure so agents can fix and retry a failed runner without restarting the whole workflow.
+- The canonical local CI script should skip the full mutation job when running under local Agent CI; local mutation verification belongs to `npm run quality:gate` or `npm run mutation`.
 - The local verification workflow should document macOS as the supported host baseline instead of implying cross-platform support.
 - The Playwright server path must avoid macOS file-watcher exhaustion in local runs without changing the normal `npm run dev` workflow.
 - The local CI documentation must cover the no-`origin` case through `.env.agent-ci` and `GITHUB_REPO` instead of treating that warning as normal noise.
@@ -100,6 +102,7 @@ The template needs a verification baseline that stays strict enough for end-to-e
 - Mutation testing must use the Vitest runner's per-test coverage analysis and related-test narrowing rather than an ad hoc minimization wrapper.
 - Mutation testing must set Stryker worker concurrency as a percentage of available parallelism instead of a fixed worker count.
 - GitHub Actions must run the full mutation gate instead of the incremental mutation gate.
+- GitHub Actions must keep the full mutation job enabled on github.com even though local Agent CI skips that job.
 - Mutation reports and Stryker incremental data must be written under ignored `reports/`, and Stryker's temporary sandbox must stay under ignored `.stryker-tmp/`.
 - New workflow write targets must be documented when they are introduced.
 
@@ -133,7 +136,7 @@ The template needs a verification baseline that stays strict enough for end-to-e
 
 - Given: a non-documentation change is ready for review or merge
 - When: the contributor runs `npm run quality:gate` and `npm run ci:local`
-- Then: the fast, browser, and local incremental mutation verification paths pass
+- Then: the local incremental mutation, local Agent CI fast, and local Agent CI browser verification paths pass
 
 **Scenario: Documentation-only change**
 
@@ -159,6 +162,12 @@ The template needs a verification baseline that stays strict enough for end-to-e
 - Given: a push or pull request runs GitHub Actions
 - When: the `quality-mutation` job runs
 - Then: it runs `npm run mutation` instead of the incremental mutation command
+
+**Scenario: Agent CI skips remote-only mutation**
+
+- Given: a contributor runs `npm run ci:local`
+- When: Agent CI evaluates `.github/workflows/ci.yml`
+- Then: it skips `quality-mutation` because the local runner is not github.com
 
 **Scenario: Contributor adds browser behavior to a Worker view**
 
