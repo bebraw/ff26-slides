@@ -227,7 +227,7 @@ function renderClosingSlideContent(slide: ClosingSlide): string {
   }
 
   return `<div class="slide-content closing-final">
-    <h1>Thanks for the fish</h1>
+    <h1>Thanks for all the fish</h1>
   </div>`;
 }
 
