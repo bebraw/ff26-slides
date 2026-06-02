@@ -25,6 +25,11 @@ type OpeningSlide =
       title: string;
     }
   | {
+      kind: "link";
+      label: string;
+      url: string;
+    }
+  | {
       kind: "speaker-grid";
       title: string;
       speakers: Speaker[];
@@ -48,6 +53,7 @@ type OpeningSlide =
       kind: "two-line";
       title: string;
       subtitle: string;
+      url?: string;
     };
 
 const mcs = [
@@ -99,8 +105,8 @@ function buildOpeningSlides(slideData: SlideData): OpeningSlide[] {
     { kind: "meetups", meetups: buildMeetups(slideData.breakSlides) },
     { kind: "code-of-conduct" },
     { kind: "statement", title: "#FutureFrontend" },
-    { kind: "statement", title: "qa.futurefrontend.com" },
-    { kind: "two-line", title: "Join conference Slack at", subtitle: "futurefrontend.com" },
+    { kind: "link", label: "qa.futurefrontend.com", url: "https://qa.futurefrontend.com" },
+    { kind: "two-line", title: "Join conference Slack at", subtitle: "futurefrontend.com", url: "https://futurefrontend.com" },
   ];
 }
 
@@ -180,16 +186,24 @@ function renderOpeningSlideContent(slide: OpeningSlide): string {
 
   if (slide.kind === "code-of-conduct") {
     return `<div class="slide-content opening-code-of-conduct">
-      <p class="next-label">Code of conduct</p>
       <h1>Berlin Code of Conduct</h1>
       <p>Report any issues to organizers and we&rsquo;ll sort things out</p>
+      <a href="https://berlincodeofconduct.org/en">berlincodeofconduct.org/en</a>
     </div>`;
   }
 
   if (slide.kind === "two-line") {
+    const subtitle = slide.url ? `<a href="${escapeHtml(slide.url)}">${escapeHtml(slide.subtitle)}</a>` : escapeHtml(slide.subtitle);
+
     return `<div class="slide-content opening-two-line">
       <p>${escapeHtml(slide.title)}</p>
-      <h1>${escapeHtml(slide.subtitle)}</h1>
+      <h1>${subtitle}</h1>
+    </div>`;
+  }
+
+  if (slide.kind === "link") {
+    return `<div class="slide-content opening-statement opening-link">
+      <h1><a href="${escapeHtml(slide.url)}">${escapeHtml(slide.label)}</a></h1>
     </div>`;
   }
 
@@ -220,7 +234,7 @@ function renderOpeningDay(day: { day: string; sessions: Array<{ time: string; ti
 
 function renderOverviewSession(session: { time: string; title: string }): string {
   return `<li>
-    <time>${escapeHtml(session.time)}</time>
+    <time>${escapeHtml(formatDisplayTime(session.time))}</time>
     <span>${escapeHtml(session.title)}</span>
   </li>`;
 }
@@ -239,15 +253,18 @@ function renderSponsorTier(title: string, sponsors: Sponsor[]): string {
 function renderOpeningSponsor(sponsor: Sponsor): string {
   return `<figure class="opening-sponsor opening-sponsor-${sponsor.size}">
     <img src="${escapeHtml(toServedAssetUrl(sponsor.image))}" alt="${escapeHtml(sponsor.name)}">
-    <figcaption>${escapeHtml(sponsor.name)}</figcaption>
   </figure>`;
 }
 
 function renderMeetup(meetup: { day: string; time: string; title: string }): string {
   return `<li>
-    <time>${escapeHtml(formatMeetupDate(meetup.day))} ${escapeHtml(meetup.time)}</time>
+    <time>${escapeHtml(formatMeetupDate(meetup.day))} ${escapeHtml(formatDisplayTime(meetup.time))}</time>
     <span>${escapeHtml(meetup.title)}</span>
   </li>`;
+}
+
+function formatDisplayTime(time: string): string {
+  return time.replace(/(\d{2}:\d{2})-(\d{2}:\d{2})/gu, "$1 - $2");
 }
 
 function buildSessionOverview(breakSlides: BreakSlide[]): Array<{ day: string; sessions: Array<{ time: string; title: string }> }> {

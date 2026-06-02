@@ -71,8 +71,9 @@ describe("worker", () => {
     const body = await response.text();
     expect(body).toContain("Future Frontend 2026 Closing Slides");
     expect(body).toContain("Early signals");
-    expect(body).toContain("AI meets SDLC");
-    expect(body).toContain("Thanks for the fish");
+    expect(body).toContain("Ohjelmistofriikit");
+    expect(body).toContain("SDLCAI");
+    expect(body).toContain("Thanks for all the fish");
     expect(body).toContain("/slides.js");
   });
 

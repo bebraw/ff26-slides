@@ -403,10 +403,16 @@
 
   .opening-welcome p,
   .opening-code-of-conduct p,
+  .opening-code-of-conduct a,
   .opening-two-line p {
     color: rgb(255 255 255 / 0.72);
     font-size: clamp(1.7rem, 3.4vw, 4rem);
     line-height: 1;
+  }
+
+  .opening-code-of-conduct a {
+    text-decoration: underline;
+    text-underline-offset: 0.16em;
   }
 
   .opening-welcome h1,
@@ -414,6 +420,11 @@
   .opening-two-line h1 {
     max-width: 16ch;
     text-wrap: balance;
+  }
+
+  .opening-two-line a {
+    text-decoration: underline;
+    text-underline-offset: 0.12em;
   }
 
   .opening-statement {
@@ -424,6 +435,17 @@
   .opening-statement h1 {
     max-width: 14ch;
     text-wrap: balance;
+  }
+
+  .opening-link h1 {
+    max-width: none;
+  }
+
+  .opening-link a {
+    display: block;
+    text-align: center;
+    text-decoration: underline;
+    text-underline-offset: 0.12em;
   }
 
   .opening-person-grid {
@@ -526,12 +548,22 @@
     align-items: baseline;
   }
 
+  .opening-day li {
+    grid-template-columns: max-content minmax(0, 1fr);
+  }
+
   .opening-day time,
   .opening-meetups time {
     color: rgb(255 255 255 / 0.62);
     font-size: clamp(1.1rem, 1.85vw, 1.9rem);
     line-height: 1;
     white-space: nowrap;
+  }
+
+  .opening-day time,
+  .opening-meetups time {
+    font-family: ui-monospace, "SFMono-Regular", "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+    font-variant-numeric: tabular-nums;
   }
 
   .opening-day span,
@@ -578,12 +610,6 @@
   .opening-sponsor-brand img {
     width: clamp(9rem, 13vw, 15rem);
     height: clamp(3.5rem, 5vw, 6rem);
-  }
-
-  .opening-sponsor figcaption {
-    color: rgb(255 255 255 / 0.72);
-    font-size: clamp(1rem, 1.6vw, 1.45rem);
-    line-height: 1;
   }
 
   .opening-meetups {
@@ -669,6 +695,13 @@
   .closing-topic-map,
   .closing-photos,
   .closing-thanks,
+  .closing-speakers,
+  .closing-workshop-instructors,
+  .closing-organizers,
+  .closing-mcs,
+  .closing-attendees,
+  .closing-sponsors,
+  .closing-partners,
   .closing-sdlcai {
     gap: clamp(1.2rem, 3vh, 2.4rem);
   }
@@ -677,6 +710,13 @@
   .closing-topic-map h1,
   .closing-photos h1,
   .closing-thanks h1,
+  .closing-speakers h1,
+  .closing-workshop-instructors h1,
+  .closing-organizers h1,
+  .closing-mcs h1,
+  .closing-attendees h1,
+  .closing-sponsors h1,
+  .closing-partners h1,
   .closing-sdlcai h1 {
     max-width: none;
     font-size: clamp(3.4rem, 7vw, 8.2rem);
@@ -685,21 +725,21 @@
 
   .closing-numbers > div {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: clamp(0.8rem, 2vw, 1.5rem);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.7rem) clamp(1.1rem, 2.2vw, 1.9rem);
   }
 
   .closing-numbers figure {
     display: grid;
     gap: clamp(0.6rem, 1.2vh, 0.9rem);
     align-content: start;
-    min-height: clamp(9rem, 17vw, 18rem);
+    min-height: clamp(7.5rem, 13vw, 13.5rem);
     border-top: 1px solid rgb(255 255 255 / 0.5);
     padding-top: clamp(0.8rem, 1.8vh, 1.4rem);
   }
 
   .closing-numbers strong {
-    font-size: clamp(4rem, 9vw, 10rem);
+    font-size: clamp(3.6rem, 7.5vw, 8.4rem);
     font-weight: 850;
     line-height: 0.78;
   }
@@ -777,7 +817,7 @@
   }
 
   .closing-thanks ul {
-    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: clamp(0.6rem, 1.5vw, 1.2rem);
   }
 
@@ -789,13 +829,181 @@
     line-height: 0.95;
   }
 
+  .closing-speaker-grid {
+    display: grid;
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+    gap: clamp(0.45rem, 1vw, 0.9rem);
+    align-items: center;
+    justify-items: center;
+  }
+
+  .closing-speaker {
+    display: grid;
+    place-items: center;
+  }
+
+  .closing-speaker img {
+    width: clamp(3.5rem, 6.1vw, 6rem);
+    height: clamp(3.5rem, 6.1vw, 6rem);
+    border-radius: 999px;
+    object-fit: cover;
+    filter: grayscale(1);
+  }
+
+  .closing-workshop-instructor-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: clamp(0.8rem, 1.8vw, 1.6rem);
+    align-items: center;
+    justify-items: center;
+  }
+
+  .closing-workshop-instructor {
+    display: grid;
+    place-items: center;
+  }
+
+  .closing-workshop-instructor img {
+    width: clamp(5.2rem, 9vw, 9rem);
+    height: clamp(5.2rem, 9vw, 9rem);
+    border-radius: 999px;
+    object-fit: cover;
+    filter: grayscale(1);
+  }
+
+  .closing-organizer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.9rem, 2vw, 1.8rem);
+    align-items: center;
+    justify-items: center;
+  }
+
+  .closing-organizer {
+    display: grid;
+    place-items: center;
+  }
+
+  .closing-organizer img {
+    width: clamp(6.2rem, 11vw, 11rem);
+    height: clamp(6.2rem, 11vw, 11rem);
+    border-radius: 999px;
+    object-fit: cover;
+    filter: grayscale(1);
+  }
+
+  .closing-mc-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1rem, 3vw, 3rem);
+    align-items: center;
+    justify-items: center;
+  }
+
+  .closing-mc {
+    display: grid;
+    place-items: center;
+  }
+
+  .closing-mc img {
+    width: clamp(7rem, 13vw, 14rem);
+    height: clamp(7rem, 13vw, 14rem);
+    border-radius: 999px;
+    object-fit: cover;
+    filter: grayscale(1);
+  }
+
+  .closing-attendee-visual {
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.42fr) minmax(0, 1fr);
+    gap: clamp(1.2rem, 4vw, 4rem);
+    align-items: center;
+    border-top: 1px solid rgb(255 255 255 / 0.5);
+    padding-top: clamp(0.9rem, 2vh, 1.5rem);
+  }
+
+  .closing-attendee-visual strong {
+    font-size: clamp(4.5rem, 12vw, 13rem);
+    font-weight: 850;
+    line-height: 0.78;
+  }
+
+  .closing-attendee-grid {
+    justify-self: end;
+    display: grid;
+    grid-template-columns: repeat(30, minmax(0, 1fr));
+    gap: clamp(0.08rem, 0.22vw, 0.18rem);
+    align-items: center;
+    width: min(100%, 44rem);
+  }
+
+  .closing-attendee-unit {
+    aspect-ratio: 1;
+    border: 1px solid rgb(255 255 255 / 0.72);
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.82);
+  }
+
+  .closing-sponsor-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: clamp(0.55rem, 1.5vw, 1.2rem);
+    align-items: center;
+  }
+
+  .closing-sponsor {
+    display: grid;
+    place-items: center;
+    min-height: clamp(5.2rem, 9vw, 9.2rem);
+    border-top: 1px solid rgb(255 255 255 / 0.5);
+    padding-top: clamp(0.55rem, 1.2vh, 0.9rem);
+  }
+
+  .closing-sponsor img {
+    width: min(100%, 15rem);
+    height: clamp(2.8rem, 5vw, 5.3rem);
+    background: #fff;
+    object-fit: contain;
+    padding: clamp(0.45rem, 0.9vw, 0.8rem);
+    filter: grayscale(1);
+  }
+
+  .closing-sponsor-brand img {
+    width: min(100%, 12rem);
+    height: clamp(2.5rem, 4.3vw, 4.6rem);
+  }
+
+  .closing-partner-grid {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: clamp(0.45rem, 1.1vw, 0.9rem);
+    align-items: center;
+  }
+
+  .closing-partner {
+    display: grid;
+    place-items: center;
+    min-height: clamp(4rem, 7vw, 7rem);
+    border-top: 1px solid rgb(255 255 255 / 0.45);
+    padding-top: clamp(0.4rem, 0.9vh, 0.7rem);
+  }
+
+  .closing-partner img {
+    width: min(100%, 10rem);
+    height: clamp(2rem, 3.6vw, 3.7rem);
+    background: #fff;
+    object-fit: contain;
+    padding: clamp(0.35rem, 0.65vw, 0.6rem);
+    filter: grayscale(1);
+  }
+
   .closing-sdlcai > div,
-  .closing-sdlcai > p,
-  .closing-sdlcai strong {
+  .closing-sdlcai a {
     max-width: 34ch;
   }
 
-  .closing-sdlcai p {
+  .closing-sdlcai p,
+  .closing-sdlcai a {
     color: rgb(255 255 255 / 0.72);
     font-size: clamp(1.45rem, 2.6vw, 3rem);
     line-height: 1.02;
@@ -808,11 +1016,10 @@
     padding-top: clamp(0.8rem, 1.8vh, 1.4rem);
   }
 
-  .closing-sdlcai strong {
+  .closing-sdlcai a {
     display: block;
-    font-size: clamp(2.4rem, 5.2vw, 6rem);
-    font-weight: 850;
-    line-height: 0.9;
+    text-decoration: underline;
+    text-underline-offset: 0.12em;
   }
 
   .closing-final {
@@ -1199,6 +1406,57 @@
 
     .closing-thanks ul {
       gap: 0.5rem;
+    }
+
+    .closing-speaker-grid {
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 0.45rem;
+    }
+
+    .closing-speaker img {
+      width: clamp(2.4rem, 10vw, 3.4rem);
+      height: clamp(2.4rem, 10vw, 3.4rem);
+    }
+
+    .closing-workshop-instructor-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.55rem;
+    }
+
+    .closing-workshop-instructor img {
+      width: clamp(3.4rem, 16vw, 5rem);
+      height: clamp(3.4rem, 16vw, 5rem);
+    }
+
+    .closing-organizer-grid {
+      gap: 0.55rem;
+    }
+
+    .closing-organizer img {
+      width: clamp(3.8rem, 18vw, 5.5rem);
+      height: clamp(3.8rem, 18vw, 5.5rem);
+    }
+
+    .closing-mc-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+
+    .closing-mc img {
+      width: clamp(5rem, 24vw, 7rem);
+      height: clamp(5rem, 24vw, 7rem);
+    }
+
+    .closing-attendee-visual {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+
+    .closing-attendee-grid {
+      justify-self: stretch;
+      grid-template-columns: repeat(24, minmax(0, 1fr));
+      gap: 0.08rem;
+      width: 100%;
     }
 
     .sponsor-strip {

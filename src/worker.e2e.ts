@@ -52,6 +52,38 @@ test("renders the opening slide deck", async ({ page }) => {
     );
   });
   expect(speakerGridLayout).toEqual([]);
+
+  await page.goto("/opening?slide=11", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("heading", { level: 1, name: "Schedule" })).toBeVisible();
+
+  const scheduleRows = await page.locator('[data-active-slide="true"] .opening-day li').evaluateAll((rows) =>
+    rows.map((row) => {
+      const time = row.querySelector("time");
+      const title = row.querySelector("span");
+
+      if (!time || !title) {
+        throw new Error("Schedule row is missing time or title");
+      }
+
+      const timeBox = time.getBoundingClientRect();
+      const titleBox = title.getBoundingClientRect();
+
+      return {
+        fontFamily: window.getComputedStyle(time).fontFamily,
+        timeClientWidth: time.clientWidth,
+        timeRight: timeBox.right,
+        timeScrollWidth: time.scrollWidth,
+        titleLeft: titleBox.left,
+      };
+    }),
+  );
+
+  for (const row of scheduleRows) {
+    expect(row.fontFamily.toLowerCase()).toContain("mono");
+    expect(row.timeScrollWidth).toBeLessThanOrEqual(row.timeClientWidth);
+    expect(row.timeRight).toBeLessThanOrEqual(row.titleLeft);
+  }
+
   await page.goto("/opening?slide=14", { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("heading", { level: 1, name: "Meetups" })).toBeVisible();
   await expect(page.getByText("Vibe Coding Finland")).toBeVisible();
@@ -69,6 +101,7 @@ test("renders the opening slide deck", async ({ page }) => {
       const titleBox = title.getBoundingClientRect();
 
       return {
+        fontFamily: window.getComputedStyle(time).fontFamily,
         timeRight: timeBox.right,
         titleLeft: titleBox.left,
       };
@@ -76,6 +109,7 @@ test("renders the opening slide deck", async ({ page }) => {
   );
 
   for (const row of meetupRows) {
+    expect(row.fontFamily.toLowerCase()).toContain("mono");
     expect(row.timeRight).toBeLessThanOrEqual(row.titleLeft);
   }
 });
@@ -92,8 +126,32 @@ test("renders the closing slide deck", async ({ page }) => {
   await expect(page.getByText("SolidJS and reactivity")).toBeVisible();
   await expect(page.getByText("AI-first frontend work")).toBeVisible();
   await page.goto("/closing?slide=8", { waitUntil: "domcontentloaded" });
-  await expect(page.getByRole("heading", { level: 1, name: "AI meets SDLC" })).toBeVisible();
-  await expect(page.getByText("sdlcai.org")).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Speakers" })).toBeVisible();
+  await expect(page.locator('[data-active-slide="true"] .closing-speaker')).toHaveCount(64);
+  await page.goto("/closing?slide=9", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("heading", { level: 1, name: "Workshop instructors" })).toBeVisible();
+  await expect(page.locator('[data-active-slide="true"] .closing-workshop-instructor')).toHaveCount(14);
+  await page.goto("/closing?slide=10", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("heading", { level: 1, name: "Organizers" })).toBeVisible();
+  await expect(page.locator('[data-active-slide="true"] .closing-organizer')).toHaveCount(9);
+  await page.goto("/closing?slide=11", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("heading", { level: 1, name: "MCs" })).toBeVisible();
+  await expect(page.locator('[data-active-slide="true"] .closing-mc')).toHaveCount(4);
+  await page.goto("/closing?slide=12", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("heading", { level: 1, name: "Attendees" })).toBeVisible();
+  await expect(page.getByText("~600")).toBeVisible();
+  await expect(page.locator('[data-active-slide="true"] .closing-attendee-unit')).toHaveCount(600);
+  await page.goto("/closing?slide=13", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("heading", { level: 1, name: "Sponsors" })).toBeVisible();
+  await expect(page.locator('[data-active-slide="true"] .closing-sponsor')).toHaveCount(15);
+  await page.goto("/closing?slide=14", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("heading", { level: 1, name: "Partners" })).toBeVisible();
+  await expect(page.locator('[data-active-slide="true"] .closing-partner')).toHaveCount(32);
+  await page.goto("/closing?slide=15", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("heading", { level: 1, name: "SDLCAI" })).toBeVisible();
+  await expect(page.getByText("13 October 2026")).toBeVisible();
+  await expect(page.getByText("Aalto University, Espoo")).toBeVisible();
+  await expect(page.getByRole("link", { name: "sdlcai.org" })).toHaveAttribute("href", "https://sdlcai.org");
 });
 
 test("keeps individual talk slides inside the viewport", async ({ page }) => {

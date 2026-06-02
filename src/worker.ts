@@ -55,7 +55,7 @@ export async function handleRequest(request: Request): Promise<Response> {
   }
 
   if (url.pathname === "/closing") {
-    return htmlResponse(renderClosingSlideDeckPage());
+    return htmlResponse(renderClosingSlideDeckPage(await loadSlideData()));
   }
 
   if (url.pathname === "/schedule") {

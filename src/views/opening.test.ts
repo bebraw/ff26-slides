@@ -27,8 +27,9 @@ describe("renderOpeningSlideDeckPage", () => {
     expect(html).toContain("HelsinkiJS meetup");
     expect(html).toContain("Vibe Coding Finland");
     expect(html).toContain("Berlin Code of Conduct");
+    expect(html).toContain('<a href="https://berlincodeofconduct.org/en">berlincodeofconduct.org/en</a>');
     expect(html).toContain("#FutureFrontend");
-    expect(html).toContain("qa.futurefrontend.com");
+    expect(html).toContain('<h1><a href="https://qa.futurefrontend.com">qa.futurefrontend.com</a></h1>');
     expect(html).toContain("Join conference Slack at");
     expect(html).toContain("/assets/ff26-logo.svg");
     expect(html).toContain('type="module" src="/slides.js"');
@@ -44,6 +45,8 @@ describe("renderOpeningSlideDeckPage", () => {
     expect(getSlide(html, "opening-slide-speaker-grid").match(/class="opening-speaker"/g)).toHaveLength(18);
     expect(getSlide(html, "opening-slide-speaker-grid")).toContain('src="/img/rachel.webp"');
     expect(getSlide(html, "opening-slide-speaker-grid")).not.toContain("<figcaption>");
+    expect(getSlide(html, "opening-slide-sponsors")).not.toContain("<figcaption>");
+    expect(getSlide(html, "opening-slide-code-of-conduct")).not.toContain('class="next-label"');
     expect(html).toContain(
       'class="break-slide opening-slide opening-slide-two-line" aria-hidden="true" data-break-slide data-slide-number="18"',
     );
@@ -98,15 +101,17 @@ describe("renderOpeningSlideDeckPage", () => {
     expect(html).not.toContain("08:50-09:00");
     expect(scheduleSection).toContain("Custom Monday Session");
     expect(scheduleSection).toContain("Custom Tuesday Session");
+    expect(scheduleSection).toContain("09:00 - 10:30");
+    expect(scheduleSection).toContain("11:00 - 12:30");
     expect(scheduleSection).not.toContain("Break");
     expect(scheduleSection).not.toContain("Workshop Talk Should Not Appear");
     expect(speakersSection).toContain("Monday Speaker");
     expect(speakersSection).toContain("Tuesday Speaker");
     expect(speakersSection).toContain("Workshop Speaker");
     expect(speakersSection.match(/class="opening-speaker"/g)).toHaveLength(3);
-    expect(meetupsSection).toContain("8.6. 17:30-20:30");
-    expect(meetupsSection).toContain("9.6. 17:30-21:00");
-    expect(meetupsSection).toContain("10.6. 17:30-21:00");
+    expect(meetupsSection).toContain("8.6. 17:30 - 20:30");
+    expect(meetupsSection).toContain("9.6. 17:30 - 21:00");
+    expect(meetupsSection).toContain("10.6. 17:30 - 21:00");
     expect(meetupsSection).toContain("Vibe Coding Finland");
     expect(meetupsSection).not.toContain("Break");
     expect(techTier).toContain("Custom Tech");
@@ -114,7 +119,7 @@ describe("renderOpeningSlideDeckPage", () => {
     expect(brandTier).toContain("Custom Brand");
     expect(brandTier).not.toContain("Custom Tech");
     expect(slackSection).toContain("<p>Join conference Slack at</p>");
-    expect(slackSection).toContain("<h1>futurefrontend.com</h1>");
+    expect(slackSection).toContain('<h1><a href="https://futurefrontend.com">futurefrontend.com</a></h1>');
   });
 
   it("derives the schedule overview from generated day labels", () => {
