@@ -1547,7 +1547,7 @@
 
     @page schedule-sheet {
       size: A4 portrait;
-      margin: 12mm;
+      margin: 0;
     }
 
     *,
@@ -1560,7 +1560,7 @@
     html,
     body,
     .schedule-page {
-      background: #e8e3d7;
+      background: #fff;
     }
 
     .slide-deck {
@@ -1599,9 +1599,10 @@
     .schedule-sheet[data-active-slide="true"] {
       display: grid;
       page: schedule-sheet;
-      width: auto;
-      min-height: calc(297mm - 24mm);
-      background: #fffdf8;
+      width: calc(100% - 16mm);
+      min-height: calc(297mm - 16mm);
+      margin: 8mm;
+      background: #fff;
       box-shadow: none;
       border: 0;
       padding: 0;
@@ -1619,13 +1620,13 @@
     }
 
     .schedule-sheet-header {
-      grid-template-columns: 38mm 1fr;
-      gap: 12mm;
-      padding-bottom: 6mm;
+      grid-template-columns: 32mm 1fr;
+      gap: 9mm;
+      padding-bottom: 4mm;
     }
 
     .schedule-sheet-header h1 {
-      font-size: 34pt;
+      font-size: 30pt;
     }
 
     .schedule-sheet-header p,
@@ -1635,28 +1636,49 @@
     }
 
     .schedule-list {
-      gap: 4mm;
+      gap: 2.4mm;
     }
 
     .schedule-item {
-      grid-template-columns: 28mm 1fr;
-      gap: 7mm;
-      padding-bottom: 3.5mm;
+      grid-template-columns: 25mm 1fr;
+      gap: 5mm;
+      padding-bottom: 2.2mm;
       break-inside: avoid;
       page-break-inside: avoid;
     }
 
-    .schedule-item h2 {
-      font-size: 17pt;
-    }
-
-    .schedule-talks h3 {
+    .schedule-item time {
       font-size: 10.5pt;
     }
 
+    .schedule-item-main {
+      gap: 2mm;
+    }
+
+    .schedule-item h2 {
+      font-size: 14pt;
+    }
+
+    .schedule-talks,
+    .schedule-talks li {
+      gap: 1.6mm;
+    }
+
+    .schedule-talks h3 {
+      font-size: 9pt;
+    }
+
+    .schedule-speakers {
+      gap: 1.5mm 4mm;
+    }
+
     .schedule-speakers img {
-      width: 8mm;
-      height: 8mm;
+      width: 6mm;
+      height: 6mm;
+    }
+
+    .schedule-speakers figcaption {
+      font-size: 8.5pt;
     }
 
     .checkin-sheet {

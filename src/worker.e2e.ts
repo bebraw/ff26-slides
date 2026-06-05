@@ -294,5 +294,7 @@ test("serves the generated stylesheet", async ({ request }) => {
   const stylesheet = await response.text();
   expect(stylesheet).toContain("--color-app-canvas:#f3eee6");
   expect(stylesheet).toContain("@page{size:16in 10in;margin:0}");
-  expect(stylesheet).toContain("@page schedule-sheet{size:A4 portrait;margin:12mm}");
+  expect(stylesheet).toContain("@page schedule-sheet{size:A4 portrait;margin:0}");
+  expect(stylesheet).toContain("background:#fff");
+  expect(stylesheet).toContain("margin:8mm");
 });
