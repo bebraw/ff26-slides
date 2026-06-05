@@ -1,4 +1,4 @@
-import type { BreakSlide, Speaker, Talk } from "../break-slide-types";
+import type { BreakSlide, Speaker, Sponsor, Talk } from "../break-slide-types";
 import type { SlideData } from "../slide-data";
 import { escapeHtml } from "./shared";
 
@@ -11,7 +11,7 @@ type ScheduleDay = {
 
 export function renderSchedulePage(slideData: SlideData): string {
   const days = groupScheduleDays(slideData.breakSlides);
-  const renderedDays = days.map(renderScheduleDay).join("");
+  const renderedDays = days.map((day, index) => renderScheduleDay(day, slideData.sponsors, index)).join("");
 
   return `<!doctype html>
 <html lang="en">
@@ -51,7 +51,7 @@ function groupScheduleDays(breakSlides: BreakSlide[]): ScheduleDay[] {
   return days;
 }
 
-function renderScheduleDay(day: ScheduleDay, index: number): string {
+function renderScheduleDay(day: ScheduleDay, sponsors: Sponsor[], index: number): string {
   const activeAttribute = index === 0 ? ' data-active-slide="true"' : ' aria-hidden="true"';
 
   return `<section class="schedule-sheet"${activeAttribute} data-break-slide data-slide-number="${index + 1}">
@@ -65,6 +65,7 @@ function renderScheduleDay(day: ScheduleDay, index: number): string {
     <ol class="schedule-list">
       ${day.items.map(renderScheduleItem).join("")}
     </ol>
+    ${renderSponsors(sponsors)}
   </section>`;
 }
 
@@ -99,6 +100,22 @@ function renderSpeaker(speaker: Speaker): string {
   return `<figure>
     <img src="${escapeHtml(toServedAssetUrl(speaker.image))}" alt="${escapeHtml(speaker.name)}" width="96" height="96">
     <figcaption>${escapeHtml(speaker.name)}</figcaption>
+  </figure>`;
+}
+
+function renderSponsors(sponsors: Sponsor[]): string {
+  if (sponsors.length === 0) {
+    return "";
+  }
+
+  return `<footer class="schedule-sponsors" aria-label="Sponsors">
+    ${sponsors.map(renderSponsor).join("")}
+  </footer>`;
+}
+
+function renderSponsor(sponsor: Sponsor): string {
+  return `<figure class="schedule-sponsor schedule-sponsor-${sponsor.size}">
+    <img src="${escapeHtml(toServedAssetUrl(sponsor.image))}" alt="${escapeHtml(sponsor.name)}">
   </figure>`;
 }
 

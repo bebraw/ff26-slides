@@ -23,7 +23,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - **Opening slides:** `src/views/opening.ts` renders the conference opening deck with a logo-only first slide, fixed event-introduction content, an 18-speaker photo grid derived from talk data, MC photos from conference or local asset image paths, sponsor tiers from `SlideData.sponsors`, and schedule-derived session overview and meetup slides.
 - **Closing slides:** `src/views/closing.ts` renders the conference closing deck with a retrospective timeline, conference numbers including total meetups, topic follow-up notes, curated Flickr photo slides, thanks, a speaker image slide sourced from 2023-2025 speaker pages plus current GraphQL-backed `SlideData`, a workshop instructor image slide sourced from the 2023-2026 workshop pages, an organizer image slide sourced from the Future Frontend organizers page, an MC image slide sourced from 2023-2026 GraphQL `conference.mcs` data, an attendee visualization for roughly 600 attendees, a sponsor logo slide sourced from 2023-2025 sponsor sections plus `SlideData.sponsors` while excluding partners, a partner logo slide sourced from the 2023-2026 partner sections, an SDLCAI continuation slide, and a final `Thanks for all the fish` slide.
 - **Navigation:** `src/client/slides.ts` handles left/right arrow navigation and horizontal touch swipe navigation, storing the current slide in the `slide` query parameter.
-- **Print layout:** `src/tailwind-input.css` defaults print output to 16:10 slide pages and uses a marginless named A4 portrait page with an in-sheet margin for schedule and speaker check-in sheets.
+- **Print layout:** `src/tailwind-input.css` defaults print output to 16:10 slide pages and uses a marginless named A4 portrait page with an in-sheet margin for schedule and speaker check-in sheets. Schedule sheets include a compact print-only sponsor logo footer.
 - **Client build:** `npm run build:client` compiles the typed client module to `.generated/client/slides.js`, copies the served text asset to `.generated/client/slides.client.txt`, and `npm run build` runs both CSS and client builds.
 - **Assets:** The deck serves the provided Future Frontend logo at `/assets/ff26-logo.svg` and Finlandica Headline at `/fonts/FinlandicaHeadline-Regular.ttf`.
 - **Conference image proxy:** `GET /img/*` fetches matching `futurefrontend.com/img/*` speaker and sponsor images server-side so rendered pages do not hotlink browser image requests to the main conference site.
@@ -52,6 +52,7 @@ Future Frontend 2026 needs a local slide deck for the beamer between conference 
 - [ ] Printing the slides route uses 16:10 pages by default.
 - [ ] The schedule route renders one daily schedule sheet at a time on screen.
 - [ ] Printing the schedule route produces one A4 portrait sheet per day.
+- [ ] Printed schedule sheets include the current sponsor logos at the bottom of each day.
 - [ ] The speaker check-in route renders one talk-day check-in sheet at a time on screen.
 - [ ] Printing the speaker check-in route produces one A4 portrait sheet per talk day.
 - [ ] PDF exports of print sheets use a white page background and preserve explicit print colors.

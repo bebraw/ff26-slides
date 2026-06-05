@@ -1169,6 +1169,10 @@
     line-height: 1;
   }
 
+  .schedule-sponsors {
+    display: none;
+  }
+
   .checkin-sheet {
     width: min(100%, 76rem);
   }
@@ -1599,6 +1603,7 @@
     .schedule-sheet[data-active-slide="true"] {
       display: grid;
       page: schedule-sheet;
+      grid-template-rows: auto 1fr auto;
       width: calc(100% - 16mm);
       min-height: calc(297mm - 16mm);
       margin: 8mm;
@@ -1679,6 +1684,34 @@
 
     .schedule-speakers figcaption {
       font-size: 8.5pt;
+    }
+
+    .schedule-sponsors {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6mm;
+      border-top: 0.25mm solid rgb(16 16 16 / 0.16);
+      padding-top: 3mm;
+    }
+
+    .schedule-sponsor {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .schedule-sponsor img {
+      width: auto;
+      max-width: 36mm;
+      max-height: 9mm;
+      object-fit: contain;
+      filter: grayscale(1);
+    }
+
+    .schedule-sponsor-brand img {
+      max-width: 24mm;
+      max-height: 7mm;
     }
 
     .checkin-sheet {

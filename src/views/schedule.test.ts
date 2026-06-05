@@ -16,6 +16,11 @@ describe("renderSchedulePage", () => {
     expect(html).not.toContain("FF26 - Day 2 (9.6.26)");
     expect(html).toContain("We Don&#39;t Have an Idea Problem. We Have a Permission Problem.");
     expect(html).toContain("Pasi Sillanpää");
+    expect(html).toContain('class="schedule-sponsors"');
+    expect(html).toContain("Ohjelmistofriikit");
+    expect(html).toContain("/img/ohjelmistofriikit-black.svg");
+    expect(html).toContain("schedule-sponsor-tech");
+    expect(html).toContain("schedule-sponsor-brand");
     expect(html).toContain('class="schedule-sheet"');
     expect(html).toContain("data-break-slide");
     expect(html).toContain('data-active-slide="true"');
@@ -25,6 +30,7 @@ describe("renderSchedulePage", () => {
     expect(html).toContain('type="module" src="/slides.js"');
     expect(html).not.toContain("Stryker was here!");
     expect(html.match(/class="schedule-sheet"/g)).toHaveLength(4);
+    expect(html.match(/class="schedule-sponsors"/g)).toHaveLength(4);
   });
 
   it("renders schedule-only items without talk markup", () => {
@@ -60,6 +66,7 @@ describe("renderSchedulePage", () => {
     expect(html).toContain("/img/first.webp");
     expect(html).toContain("/img/second.webp");
     expect(html).not.toContain("https://futurefrontend.com/img/");
+    expect(html).not.toContain("schedule-sponsors");
     expect(html).toContain('data-slide-number="2"');
     expect(html).not.toContain("Stryker was here!");
   });
