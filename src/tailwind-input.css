@@ -487,6 +487,15 @@
     font-size: clamp(3rem, 6.5vw, 7rem);
   }
 
+  .opening-pacman-rule {
+    place-items: center;
+  }
+
+  .opening-pacman-illustration {
+    width: min(72vw, 44rem);
+    color: #fff;
+  }
+
   .opening-speakers {
     gap: clamp(1.3rem, 3vh, 2.5rem);
   }
@@ -1342,6 +1351,7 @@
     }
 
     .opening-person-grid,
+    .opening-pacman-rule,
     .opening-speaker-grid,
     .opening-day-grid,
     .opening-day li,
@@ -1380,6 +1390,10 @@
     .opening-person figcaption {
       font-size: clamp(1.55rem, 7vw, 2.8rem);
       text-align: left;
+    }
+
+    .opening-pacman-illustration {
+      width: min(84vw, 22rem);
     }
 
     .opening-sponsor-tier > div {

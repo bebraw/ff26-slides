@@ -25,6 +25,9 @@ type OpeningSlide =
       title: string;
     }
   | {
+      kind: "pacman-rule";
+    }
+  | {
       kind: "link";
       label: string;
       url: string;
@@ -101,6 +104,7 @@ function buildOpeningSlides(slideData: SlideData): OpeningSlide[] {
     { kind: "statement", title: "8 themed sessions" },
     { kind: "schedule-overview", days: buildSessionOverview(slideData.breakSlides) },
     { kind: "statement", title: "Hallway track" },
+    { kind: "pacman-rule" },
     { kind: "sponsors", sponsors: slideData.sponsors },
     { kind: "meetups", meetups: buildMeetups(slideData.breakSlides) },
     { kind: "code-of-conduct" },
@@ -163,6 +167,12 @@ function renderOpeningSlideContent(slide: OpeningSlide): string {
     </div>`;
   }
 
+  if (slide.kind === "pacman-rule") {
+    return `<div class="slide-content opening-pacman-rule">
+      ${renderPacManRuleSvg()}
+    </div>`;
+  }
+
   if (slide.kind === "sponsors") {
     return `<div class="slide-content opening-sponsors">
       <h1>Sponsors</h1>
@@ -210,6 +220,12 @@ function renderOpeningSlideContent(slide: OpeningSlide): string {
   return `<div class="slide-content opening-statement">
     <h1>${escapeHtml(slide.title)}</h1>
   </div>`;
+}
+
+function renderPacManRuleSvg(): string {
+  return `<svg class="opening-pacman-illustration" viewBox="0 0 640 420" role="img" aria-label="Pac-Man rule">
+    <path d="M318 66c-74 0-134 60-134 134s60 134 134 134c42 0 81-19 107-52l-92-82 92-82c-26-33-65-52-107-52Z" fill="currentColor"/>
+  </svg>`;
 }
 
 function renderOpeningPerson(person: { image: string; name: string }): string {

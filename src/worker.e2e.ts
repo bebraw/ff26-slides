@@ -84,7 +84,10 @@ test("renders the opening slide deck", async ({ page }) => {
     expect(row.timeRight).toBeLessThanOrEqual(row.titleLeft);
   }
 
-  await page.goto("/opening?slide=14", { waitUntil: "domcontentloaded" });
+  await page.goto("/opening?slide=13", { waitUntil: "domcontentloaded" });
+  await expect(page.locator('[data-active-slide="true"] .opening-pacman-illustration')).toBeVisible();
+
+  await page.goto("/opening?slide=15", { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("heading", { level: 1, name: "Meetups" })).toBeVisible();
   await expect(page.getByText("Vibe Coding Finland")).toBeVisible();
 

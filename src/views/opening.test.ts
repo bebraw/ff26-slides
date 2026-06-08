@@ -21,6 +21,7 @@ describe("renderOpeningSlideDeckPage", () => {
     expect(html).toContain("Designing futures");
     expect(html).toContain("Agentic use cases");
     expect(html).toContain("Ohjelmistofriikit");
+    expect(html).toContain('aria-label="Pac-Man rule"');
     expect(html).toContain("Tech sponsors");
     expect(html).toContain("Brand sponsor");
     expect(html).toContain("Mobile Mates meetup");
@@ -45,16 +46,20 @@ describe("renderOpeningSlideDeckPage", () => {
     expect(getSlide(html, "opening-slide-speaker-grid").match(/class="opening-speaker"/g)).toHaveLength(18);
     expect(getSlide(html, "opening-slide-speaker-grid")).toContain('src="/img/rachel.webp"');
     expect(getSlide(html, "opening-slide-speaker-grid")).not.toContain("<figcaption>");
+    expect(getSlide(html, "opening-slide-pacman-rule")).toContain('class="opening-pacman-illustration"');
+    expect(getSlide(html, "opening-slide-pacman-rule")).not.toContain("<h1>");
+    expect(html.indexOf("Hallway track")).toBeLessThan(html.indexOf('aria-label="Pac-Man rule"'));
+    expect(html.indexOf('aria-label="Pac-Man rule"')).toBeLessThan(html.indexOf("Sponsors"));
     expect(getSlide(html, "opening-slide-sponsors")).not.toContain("<figcaption>");
     expect(getSlide(html, "opening-slide-code-of-conduct")).not.toContain('class="next-label"');
     expect(html).toContain(
-      'class="break-slide opening-slide opening-slide-two-line" aria-hidden="true" data-break-slide data-slide-number="18"',
+      'class="break-slide opening-slide opening-slide-two-line" aria-hidden="true" data-break-slide data-slide-number="19"',
     );
     expect(html).not.toContain("Red lanyard");
     expect(html).not.toContain("https://futurefrontend.com/img/");
     expect(html).not.toContain("Stryker was here!");
-    expect(html.match(/data-break-slide/g)).toHaveLength(18);
-    expect(html.match(/aria-hidden="true"/g)).toHaveLength(17);
+    expect(html.match(/data-break-slide/g)).toHaveLength(19);
+    expect(html.match(/aria-hidden="true"/g)).toHaveLength(18);
   });
 
   it("derives welcome time, session overview, meetups, and sponsor tiers from slide data", () => {
