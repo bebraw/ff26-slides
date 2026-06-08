@@ -105,11 +105,11 @@ function buildOpeningSlides(slideData: SlideData): OpeningSlide[] {
     { kind: "schedule-overview", days: buildSessionOverview(slideData.breakSlides) },
     { kind: "statement", title: "Hallway track" },
     { kind: "pacman-rule" },
+    { kind: "link", label: "qa.futurefrontend.com", url: "https://qa.futurefrontend.com" },
     { kind: "sponsors", sponsors: slideData.sponsors },
     { kind: "meetups", meetups: buildMeetups(slideData.breakSlides) },
     { kind: "code-of-conduct" },
     { kind: "statement", title: "#FutureFrontend" },
-    { kind: "link", label: "qa.futurefrontend.com", url: "https://qa.futurefrontend.com" },
     { kind: "two-line", title: "Join conference Slack at", subtitle: "futurefrontend.com", url: "https://futurefrontend.com" },
   ];
 }

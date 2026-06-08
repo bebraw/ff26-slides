@@ -49,7 +49,8 @@ describe("renderOpeningSlideDeckPage", () => {
     expect(getSlide(html, "opening-slide-pacman-rule")).toContain('class="opening-pacman-illustration"');
     expect(getSlide(html, "opening-slide-pacman-rule")).not.toContain("<h1>");
     expect(html.indexOf("Hallway track")).toBeLessThan(html.indexOf('aria-label="Pac-Man rule"'));
-    expect(html.indexOf('aria-label="Pac-Man rule"')).toBeLessThan(html.indexOf("Sponsors"));
+    expect(html.indexOf('aria-label="Pac-Man rule"')).toBeLessThan(html.indexOf("qa.futurefrontend.com"));
+    expect(html.indexOf("qa.futurefrontend.com")).toBeLessThan(html.indexOf("Sponsors"));
     expect(getSlide(html, "opening-slide-sponsors")).not.toContain("<figcaption>");
     expect(getSlide(html, "opening-slide-code-of-conduct")).not.toContain('class="next-label"');
     expect(html).toContain(
