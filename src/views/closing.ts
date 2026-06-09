@@ -202,9 +202,6 @@ type ClosingSlide =
     }
   | {
       kind: "sdlcai";
-    }
-  | {
-      kind: "final";
     };
 
 type Photo = {
@@ -336,7 +333,6 @@ function buildClosingSlides(slideData: SlideData): ClosingSlide[] {
     { kind: "sponsors", sponsors: buildClosingSponsors(slideData.sponsors) },
     { kind: "partners", partners },
     { kind: "sdlcai" },
-    { kind: "final" },
   ];
 }
 // Stryker restore all
@@ -464,9 +460,11 @@ function renderClosingSlideContent(slide: ClosingSlide): string {
     </div>`;
   }
 
-  return `<div class="slide-content closing-final">
-    <h1>Thanks for all the fish</h1>
-  </div>`;
+  return assertUnreachableClosingSlide(slide);
+}
+
+function assertUnreachableClosingSlide(slide: never): never {
+  throw new Error(`Unsupported closing slide: ${JSON.stringify(slide)}`);
 }
 
 function renderTimelineItem(edition: { year: string; note: string }): string {

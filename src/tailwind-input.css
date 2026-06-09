@@ -1031,17 +1031,6 @@
     text-underline-offset: 0.12em;
   }
 
-  .closing-final {
-    place-items: center;
-    text-align: center;
-  }
-
-  .closing-final h1 {
-    max-width: 13ch;
-    font-size: clamp(4.8rem, 11vw, 13rem);
-    text-wrap: balance;
-  }
-
   .schedule-page {
     min-height: 100vh;
     background: #e8e3d7;

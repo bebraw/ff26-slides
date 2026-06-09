@@ -73,7 +73,7 @@ describe("worker", () => {
     expect(body).toContain("Early signals");
     expect(body).toContain("Ohjelmistofriikit");
     expect(body).toContain("SDLCAI");
-    expect(body).toContain("Thanks for all the fish");
+    expect(body).not.toContain("Thanks for all the fish");
     expect(body).toContain("/slides.js");
   });
 

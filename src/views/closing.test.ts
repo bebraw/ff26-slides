@@ -111,7 +111,7 @@ describe("renderClosingSlideDeckPage", () => {
     expect(html).not.toContain("software development lifecycle");
     expect(html).not.toContain("The archives stay open");
     expect(html).not.toContain("futurefrontend.com/2023/");
-    expect(html).toContain("Thanks for all the fish");
+    expect(html).not.toContain("Thanks for all the fish");
     expect(html).toContain("/assets/ff26-logo.svg");
     expect(html).toContain('type="module" src="/slides.js"');
     expect(html).toContain('rel="stylesheet" href="/styles.css"');
@@ -125,8 +125,8 @@ describe("renderClosingSlideDeckPage", () => {
     expect(html).toContain("https://www.flickr.com/photos/react-finland/54582055640/");
     expect(html).toContain("https://live.staticflickr.com/65535/54582055640_e348f04483_b.jpg");
     expect(html).not.toContain("Stryker was here!");
-    expect(html.match(/data-break-slide/g)).toHaveLength(16);
-    expect(html.match(/<section class="break-slide closing-slide[^>]+aria-hidden="true"/g)).toHaveLength(15);
+    expect(html.match(/data-break-slide/g)).toHaveLength(15);
+    expect(html.match(/<section class="break-slide closing-slide[^>]+aria-hidden="true"/g)).toHaveLength(14);
   });
 });
 
