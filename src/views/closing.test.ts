@@ -18,7 +18,7 @@ describe("renderClosingSlideDeckPage", () => {
     expect(html).toContain("Future Frontend 2026 Closing Slides");
     expect(html).toContain("Closing");
     expect(html).toContain("Four editions");
-    expect(html).toContain("The last edition in this series");
+    expect(html).toContain("The last edition in this series?");
     expect(html).toContain("By the numbers");
     expect(html).toContain("32");
     expect(html).toContain("sessions");

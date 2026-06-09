@@ -123,7 +123,7 @@ test("renders the closing slide deck", async ({ page }) => {
   await expect(page.locator('[data-active-slide="true"] .opening-title-logo')).toBeVisible();
   await page.keyboard.press("ArrowRight");
   await expect(page).toHaveURL(/slide=2/);
-  await expect(page.getByText("The last edition in this series")).toBeVisible();
+  await expect(page.getByText("The last edition in this series?")).toBeVisible();
   await page.goto("/closing?slide=4", { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("heading", { level: 1, name: "Early signals" })).toBeVisible();
   await expect(page.getByText("SolidJS and reactivity")).toBeVisible();

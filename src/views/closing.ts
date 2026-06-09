@@ -290,7 +290,7 @@ function buildClosingSlides(slideData: SlideData): ClosingSlide[] {
         { year: "2023", note: "The first Future Frontend" },
         { year: "2024", note: "The conversation widened" },
         { year: "2025", note: "The future got closer" },
-        { year: "2026", note: "The last edition in this series" },
+        { year: "2026", note: "The last edition in this series?" },
       ],
     },
     {
